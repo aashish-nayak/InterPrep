@@ -1,0 +1,180 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Codewithanimation design tokens */
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-mute: var(--ink-mute);
+  --color-hairline: var(--hairline);
+  --color-hairline-2: var(--hairline-2);
+  --color-pink: var(--pink);
+  --color-pink-press: var(--pink-press);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-teal: var(--teal);
+  --color-teal-soft: var(--teal-soft);
+  --color-sun: var(--sun);
+
+  --shadow-raised: 0 2px 4px rgba(27, 26, 23, 0.05), 0 14px 34px rgba(27, 26, 23, 0.08);
+}
+
+@layer base {
+  :root {
+    /* Exact codewithanimation palette */
+    --bg: #fff7e6;
+    --surface: #ffffff;
+    --surface-2: #fffbef;
+    --ink: #1b1a17;
+    --ink-soft: #4f4c44;
+    --ink-mute: #6b6757;
+    --hairline: #efe7d3;
+    --hairline-2: #e7dec8;
+    --pink: #ff477e;
+    --pink-press: #e22e66;
+    --warning: #f2994a;
+    --warning-soft: #fcefe0;
+    --teal: #16b8a6;
+    --teal-soft: #e2f6f3;
+    --sun: #ffd23f;
+
+    /* Theme bindings */
+    --background: #fff7e6;
+    --foreground: #1b1a17;
+    --card: #ffffff;
+    --card-foreground: #1b1a17;
+    --popover: #ffffff;
+    --popover-foreground: #1b1a17;
+    --primary: #ff477e;
+    --primary-foreground: #ffffff;
+    --secondary: #fffbef;
+    --secondary-foreground: #4f4c44;
+    --muted: #f5eedb;
+    --muted-foreground: #6b6757;
+    --accent: #fff0f5;
+    --accent-foreground: #e22e66;
+    --destructive: #e11d48;
+    --destructive-foreground: #ffffff;
+    --border: #efe7d3;
+    --input: #efe7d3;
+    --ring: #ff477e;
+
+    --radius: 0.75rem;
+
+    --code-bg: #fffbef;
+    --code-fg: #1b1a17;
+    --code-highlight: #ffeff3;
+  }
+
+  [data-theme="dark"] {
+    --bg: #151310;
+    --surface: #1f1c18;
+    --surface-2: #27231e;
+    --ink: #fbf7ee;
+    --ink-soft: #d6cfbf;
+    --ink-mute: #9e9482;
+    --hairline: #342e26;
+    --hairline-2: #453e34;
+    --pink: #ff5e8f;
+    --pink-press: #ff477e;
+    --warning: #f5a359;
+    --warning-soft: #2c2014;
+    --teal: #20c997;
+    --teal-soft: #142924;
+    --sun: #ffd23f;
+
+    --background: #151310;
+    --foreground: #fbf7ee;
+    --card: #1f1c18;
+    --card-foreground: #fbf7ee;
+    --popover: #1f1c18;
+    --popover-foreground: #fbf7ee;
+    --primary: #ff5e8f;
+    --primary-foreground: #151310;
+    --secondary: #27231e;
+    --secondary-foreground: #d6cfbf;
+    --muted: #27231e;
+    --muted-foreground: #9e9482;
+    --accent: #381e28;
+    --accent-foreground: #ff94b8;
+    --destructive: #fb7185;
+    --destructive-foreground: #151310;
+    --border: #342e26;
+    --input: #342e26;
+    --ring: #ff5e8f;
+
+    --code-bg: #1a1814;
+    --code-fg: #fbf7ee;
+    --code-highlight: #3b222d;
+  }
+
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "rlig" 1, "calt" 1;
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
+  }
+
+  code, kbd, samp, pre {
+    font-family: var(--font-mono);
+  }
+
+  ::selection {
+    background: #ff477e26;
+    color: #ff477e;
+  }
+}
+
+/* Syntax Highlighting matching Code With Animation */
+.syntax-keyword { color: #ff477e; font-weight: 600; }
+.syntax-string { color: #16b8a6; }
+.syntax-variable { color: #f2994a; font-weight: 500; }
+.syntax-comment { color: #8e8877; font-style: italic; }
+.syntax-number { color: #8b5cf6; }
+.syntax-function { color: #3b82f6; font-weight: 500; }
+
+[data-theme="dark"] .syntax-keyword { color: #ff5e8f; }
+[data-theme="dark"] .syntax-string { color: #20c997; }
+[data-theme="dark"] .syntax-variable { color: #f5a359; }
+[data-theme="dark"] .syntax-comment { color: #9e9482; }
+[data-theme="dark"] .syntax-number { color: #a78bfa; }
+[data-theme="dark"] .syntax-function { color: #60a5fa; }
+

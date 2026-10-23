@@ -1,0 +1,28 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {selectQuestions,sampleQuestions,readStore} from '../src/model.js';
+const q=JSON.parse(fs.readFileSync('src/questions.json','utf8'));
+const source=fs.readFileSync('public/sources/updated-guide.md','utf8');
+const ids=[...source.matchAll(/^## (\d+)\./gm)].map(m=>+m[1]);
+assert.deepEqual(q.filter(x=>x.source==='updated-guide').map(x=>x.id),ids);
+assert.equal(q.filter(x=>x.source==='original-questions').length,JSON.parse(fs.readFileSync('src/additional.json','utf8')).length);
+assert.equal(new Set(q.map(x=>x.id)).size,q.length);
+for(const item of q){for(const lang of ['en','hi']){assert.ok(item.title[lang]?.length>3);assert.ok(item.answer[lang]?.length>30);}assert.ok(item.category);}
+assert.ok(fs.readFileSync('public/sources/original-questions.md','utf8').includes('Interview Questions for Laravel'));
+assert.equal(selectQuestions(q,{query:'N+1'}).some(x=>x.id===69),true);
+assert.equal(selectQuestions(q,{query:'zzzz-no-match'}).length,0);
+assert.deepEqual(selectQuestions(q,{savedOnly:true,saved:[1,12]}).map(x=>x.id),[1,12]);
+assert.deepEqual(selectQuestions(q,{status:'learned',progress:{'1':'learned','2':'review'}}).map(x=>x.id),[1]);
+assert.ok(selectQuestions(q,{category:'sql'}).every(x=>x.category==='sql'));
+assert.equal(sampleQuestions(q,10).length,10);assert.equal(new Set(sampleQuestions(q,125).map(x=>x.id)).size,125);assert.deepEqual(sampleQuestions([],10),[]);
+assert.equal(readStore({getItem:()=>'{broken'}).lang,'hi');
+assert.deepEqual(readStore({getItem:()=>JSON.stringify({saved:[1,'oops'],progress:{'1':'learned','2':'garbage'},lang:'en'})}).saved,[1]);
+assert.ok(q.find(x=>x.id===47).answer.en.includes('evaluation order'));
+import {cleanTextForSpeech,getVoiceConfig} from '../src/tts.js';
+assert.equal(cleanTextForSpeech('Hello `PHP` **world**!'), 'Hello PHP world!');
+assert.equal(getVoiceConfig({lang:'hi'}).languageCode, 'hi-IN');
+assert.equal(getVoiceConfig({lang:'hi',gender:'FEMALE'}).voiceName, 'Kore');
+assert.equal(getVoiceConfig({lang:'en',gender:'MALE'}).voiceName, 'Puck');
+assert.equal(readStore({getItem:(k)=>k==='google_tts_api_key'?'my-test-key':null}).googleTtsApiKey, 'my-test-key');
+assert.equal(readStore({getItem:()=>null}).ttsModel, 'gemini-3.8-flash');
+console.log('CONTENT_AND_LOGIC_OK');

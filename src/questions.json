@@ -1,0 +1,2377 @@
+[
+  {
+    "id": 1,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "What is PHP?",
+      "hi": "PHP kya hai? PHP ka full form kya hai?"
+    },
+    "answer": {
+      "en": "PHP means PHP: Hypertext Preprocessor. It runs on the server to process requests, work with a database, and return HTML or JSON. Laravel provides structure and reusable tools around PHP.",
+      "hi": "**Simple Hinglish:** PHP ek server-side programming language hai. Jab\nuser website par form submit karta hai, PHP server par data process kar\nsakti hai, database se baat kar sakti hai aur response bhej sakti hai.\n\nPHP ka current full form **PHP: Hypertext Preprocessor** hai. Pehle iska\nnaam Personal Home Page tha.\n\n**Interview answer:** PHP is a general-purpose server-side scripting\nlanguage widely used to build dynamic websites, APIs and web\napplications. Laravel is a popular PHP framework."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 2,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "What is a session?",
+      "hi": "Session kya hota hai?"
+    },
+    "answer": {
+      "en": "HTTP requests do not remember each other. A session stores state, usually on the server, while the browser holds a session ID cookie. Expiry depends on configuration, not simply closing the browser.",
+      "hi": "**Simple Hinglish:** HTTP request apne aap purani request yaad nahi\nrakhti. Session server-side data store karne mein help karta hai, jaise\nlogin user ki session state. Browser mein aam taur par session ID wali\ncookie rakhi jaati hai.\n\n**Yaad rakho:** Session data hamesha browser band karte hi delete ho, ye\nguaranteed nahi hai. Expiry session configuration aur storage par depend\nkarti hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "session_start();\n$_SESSION['user_id'] = 25;\necho $_SESSION['user_id'];"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 3,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "Cookies vs sessions?",
+      "hi": "Cookie aur Session mein kya difference hai?"
+    },
+    "answer": {
+      "en": "A cookie is stored in the browser and sent with matching requests. A session usually stores data on the server, identified by a cookie. Treat client cookies as untrusted and do not store plaintext secrets in them.",
+      "hi": "-   **Cookie:** Browser mein store hoti hai aur applicable requests ke\n    saath server ko bheji ja sakti hai.\n-   **Session:** Aam taur par server-side data hota hai; browser mein\n    session ID cookie ho sakti hai.\n-   Cookie user modify kar sakta hai, isliye cookie data ko bina\n    verification trust mat karo.\n-   Sensitive information plain cookie mein store mat karo."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 4,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "Variables vs constants?",
+      "hi": "Variable aur Constant mein difference?"
+    },
+    "answer": {
+      "en": "A variable can be reassigned. A constant is a fixed named value declared with const or define(). Use a constant for a value that should not change during execution.",
+      "hi": "Variable ki value badal sakti hai. Constant ek fixed named value hai.\nPHP constants ko `define()` ya `const` se define kiya ja sakta hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$price = 100;\n$price = 200; // allowed\n\ndefine('TAX_RATE', 0.18);\n// TAX_RATE ko dobara assign nahi kar sakte"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 5,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "What are variable variables?",
+      "hi": "$message aur $$message mein difference?"
+    },
+    "answer": {
+      "en": "$message is a normal variable. $$message uses the value of $message as another variable's name. If $message is 'greeting', $$message reads $greeting. Prefer arrays when dynamic names make code confusing.",
+      "hi": "`$message` normal variable hai. `$$message` variable-variable syntax\nhai: `$message` ki value ko doosre variable ka naam maana jaata hai.\n\nDynamic variable names code ko confusing bana sakte hain, isliye routine\napplication code mein carefully use karein."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$message = 'greeting';\n$greeting = 'Hello';\necho $$message; // Hello"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 6,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "Is PHP case-sensitive?",
+      "hi": "Kya PHP case-sensitive hai?"
+    },
+    "answer": {
+      "en": "Variable and constant names are case-sensitive. Function and class names are case-insensitive in PHP, but consistent spelling is essential, especially with filesystem-based autoloading.",
+      "hi": "-   Variable names case-sensitive hain: `$name` aur `$Name` alag hain.\n-   Function names aur class names PHP mein case-insensitive hote hain,\n    lekin consistent casing best practice hai.\n-   Constants case-sensitive hote hain.\n-   Namespaces aur class names ko PSR-style casing mein consistent\n    rakhein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 7,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "What are PHP's data types?",
+      "hi": "PHP ke data types kaun se hain?"
+    },
+    "answer": {
+      "en": "Common types are int, float, string, bool, array, object, null and resource. Declarations also support types such as callable and iterable. Choose a type that expresses the meaning of the value.",
+      "hi": "PHP ke common types: `int`, `float`, `string`, `bool`, `array`,\n`object`, `null`, aur `resource`. `callable` aur `iterable` jaise\npseudo-types/type declarations bhi milte hain."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$age = 26;             // int\n$price = 10.5;         // float\n$name = 'Aashish';     // string\n$isActive = true;      // bool\n$items = ['pen', 'book']; // array\n$user = null;          // null"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 8,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "How do you name a PHP variable?",
+      "hi": "PHP variable naming rules?"
+    },
+    "answer": {
+      "en": "Start with $, then a letter or underscore. Subsequent characters can include digits. Spaces are not allowed. $userName and $_count are valid; a name starting with a digit is not.",
+      "hi": "Variable `$` se start hota hai. Uske baad naam letter ya underscore se\nstart hona chahiye; number se start nahi. Naam mein letters, numbers aur\nunderscores aa sakte hain. Spaces allowed nahi hote."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$userName = 'Aashish'; // valid\n$_count = 5;           // valid\n// $2name = 'x';       // invalid"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 9,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "echo vs print?",
+      "hi": "echo aur print mein difference?"
+    },
+    "answer": {
+      "en": "Both produce output. echo accepts one or more arguments and has no return value. print accepts one argument and returns 1. Choose readable code rather than treating their tiny performance difference as an optimization.",
+      "hi": "Dono output show karte hain. `echo` ek ya multiple arguments le sakta\nhai aur value return nahi karta. `print` ek argument leta hai aur `1`\nreturn karta hai. Performance ka difference aam taur par practical\noptimization ka main concern nahi hota."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "echo 'Hello', ' World';\nprint 'Hello';"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 10,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "Loose vs strict comparison?",
+      "hi": "== aur === mein difference?"
+    },
+    "answer": {
+      "en": "== can convert types before comparing values. === compares both type and value. The number 10 loosely equals the string '10', but they are not strictly identical. Prefer strict comparisons when types matter.",
+      "hi": "`==` value compare karte waqt type conversion kar sakta hai. `===` value\naur type dono compare karta hai.\n\n**Best practice:** Unexpected type conversion se bachne ke liye strict\ncomparison prefer karein."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "var_dump(10 == '10');  // true\nvar_dump(10 === '10'); // false"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 11,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "isset(), empty(), array_key_exists()?",
+      "hi": "isset(), empty() aur array_key_exists()?"
+    },
+    "answer": {
+      "en": "isset() is false for missing or null values. empty() is true for missing and false-like values, including 0 and '0'. array_key_exists() checks whether a key exists even when its value is null.",
+      "hi": "-   `isset($x)`: variable/key exist kare aur value `null` na ho to true.\n-   `empty($x)`: missing ya false-like values jaise `0`, `\"0\"`, `false`,\n    `null`, `\"\"` ke liye true.\n-   `array_key_exists('x', $arr)`: key present hai ya nahi check karta\n    hai, chahe value `null` ho."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$data = ['name' => null];\nisset($data['name']);            // false\narray_key_exists('name', $data); // true"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 12,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "Post-increment vs pre-increment?",
+      "hi": "$x++ aur ++$x mein difference?"
+    },
+    "answer": {
+      "en": "$x++ returns the old value, then increments. ++$x increments first and returns the new value. Starting at 5, $a = $x++ gives a=5 and x=6. A separate $b = ++$x then gives b=7 and x=7.",
+      "hi": "Post-increment (`$x++`) pehle current value use karta hai, phir\nincrement hota hai. Pre-increment (`++$x`) pehle increment karta hai,\nphir nayi value use hoti hai.\n\nComplex expressions mein increment operators mix karne ke bajay separate\nlines likhna zyada readable hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$x = 5;\n$a = $x++; // $a = 5, $x = 6\n$b = ++$x; // $x = 7, $b = 7"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 13,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "Type juggling vs casting?",
+      "hi": "Type juggling aur type casting kya hai?"
+    },
+    "answer": {
+      "en": "Type juggling is automatic conversion based on context. Casting is an explicit conversion, such as (int) '42'. A numeric string can take part in arithmetic, but casting untrusted data is not a substitute for validation.",
+      "hi": "**Type juggling:** PHP context ke hisaab se type automatically convert\nkar sakta hai.\\\n**Type casting:** Developer explicitly type convert karta hai.\n\nUntrusted input ko blindly cast karna validation ka replacement nahi\nhai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "echo '5' + 2;     // 7 (numeric conversion)\n$number = (int) '42';"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 14,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "Does the string 'true' equal true?",
+      "hi": "$x = 'true'; $y = true; echo $x == $y; ka result?"
+    },
+    "answer": {
+      "en": "With ==, comparing against a boolean converts the other operand to boolean. The nonempty string 'true' becomes true, so echo prints 1. With === the result is false because string and bool are different types.",
+      "hi": "PHP mein boolean comparison ke context mein non-empty string `'true'`\ntruthy hai, isliye loose comparison true hota hai aur `echo` aam taur\npar `1` print karta hai. Strict comparison `$x === $y` false hai kyunki\ntypes alag hain."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 15,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "What are references?",
+      "hi": "PHP references (&) kya hote hain?"
+    },
+    "answer": {
+      "en": "A reference lets two variable names access the same value. With $y =& $x, changing $y also changes the value seen through $x. Use this only when shared mutation is intentional.",
+      "hi": "Reference mein do variables ek hi value ko refer kar sakte hain.\n\nReferences powerful hain, lekin code samajhna mushkil bana sakte hain.\nUnhe tabhi use karein jab actual need ho."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$x = 10;\n$y =& $x;\n$y += 5;\necho $x; // 15"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 16,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "What does unset do to a reference?",
+      "hi": "Reference ke baad unset() kya karta hai?"
+    },
+    "answer": {
+      "en": "unset() removes a variable binding. If an alias still refers to the value, that alias remains usable. It does not delete a file; unlink() is the filesystem function.",
+      "hi": "`unset($original)` variable name ko remove karta hai; is example mein\n`$alias` ab bhi value access kar sakta hai. `unset()` file delete karne\nke liye nahi hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$original = 'Hello';\n$alias =& $original;\nunset($original);\necho $alias; // Hello"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 17,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "break vs continue?",
+      "hi": "break aur continue?"
+    },
+    "answer": {
+      "en": "break exits the loop or switch. continue skips the rest of the current loop iteration. A numeric level can affect outer loops, so use it carefully and favor a clear control flow.",
+      "hi": "-   `break`: loop ya switch se bahar nikalta hai.\n-   `continue`: current loop iteration skip karke next iteration par\n    jaata hai.\n-   Nested loops mein `break 2` ya `continue 2` multiple levels ko\n    affect kar sakte hain."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 18,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "for vs foreach?",
+      "hi": "for aur foreach?"
+    },
+    "answer": {
+      "en": "Use for when you need explicit control of a counter and stop condition. Use foreach to traverse arrays or iterables. Neither is universally faster; readability and measurements should guide the choice.",
+      "hi": "`for` tab useful hai jab counter/index aur stopping condition control\nkarni ho. `foreach` arrays aur iterables ke elements par iterate karne\nke liye clear aur convenient hota hai. `foreach` hamesha faster hai,\naisa universal rule nahi; readability aur actual measurement important\nhain."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "for ($i = 0; $i < 3; $i++) echo $i;\n\nforeach (['a', 'b', 'c'] as $value) echo $value;"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 19,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "include vs require?",
+      "hi": "include, require, include_once, require_once?"
+    },
+    "answer": {
+      "en": "include reports a warning when a file cannot be loaded; require fails the execution unless the resulting error is handled. The _once versions avoid loading the same file twice. Prefer Composer autoloading for application classes.",
+      "hi": "`include` file na mile to warning deta hai aur execution aksar continue\nhota hai. `require` failure par execution rok deta hai. `_once` versions\nsame file ko baar-baar include hone se bachate hain. Modern Laravel apps\nmein Composer autoloading use hoti hai."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 20,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "unset vs unlink?",
+      "hi": "unset() aur unlink()?"
+    },
+    "answer": {
+      "en": "unset() removes a variable binding. unlink() attempts to delete a file. Before deleting a file, verify its path and the caller's permission. These functions solve completely different problems.",
+      "hi": "`unset($variable)` variable ko unset karta hai. `unlink($path)`\nfilesystem se file delete karne ki koshish karta hai.\n\nFile delete karne se pehle path, authorization aur expected file verify\nkarein."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$value = 'test';\nunset($value);\n\nunlink('/path/to/file.txt');"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 21,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "GET vs POST?",
+      "hi": "GET aur POST mein difference?"
+    },
+    "answer": {
+      "en": "GET retrieves a representation and commonly uses URL parameters. POST submits data or initiates an operation with a request body. Hiding data from the URL does not make POST secure; use HTTPS.",
+      "hi": "`GET` ka usual purpose data retrieve karna hai; parameters aksar URL\nmein hote hain. `POST` data submit karne ya operation initiate karne ke\nliye common hai; payload request body mein hota hai. POST data URL mein\nna dikhne se automatically secure nahi ho jaata---HTTPS phir bhi zaroori\nhai."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 22,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "PUT vs PATCH?",
+      "hi": "PUT aur PATCH kya hain?"
+    },
+    "answer": {
+      "en": "PUT normally replaces a resource and is intended to be idempotent. PATCH applies a partial change. Idempotent means repeating the same request has the same intended final effect.",
+      "hi": "`PUT` aam taur par resource ko replace karne ke liye aur `PATCH` partial\nupdate ke liye use hota hai. Properly designed `PUT` idempotent hota\nhai: same request repeat karne se intended final state nahi badalti."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 23,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "What kinds of PHP errors exist?",
+      "hi": "PHP errors ke main types?"
+    },
+    "answer": {
+      "en": "Syntax errors prevent code from parsing. Warnings can allow execution to continue. Runtime Error and Exception objects implement Throwable. The exact category of a problem can differ across PHP versions.",
+      "hi": "-   **Parse/Syntax error:** code ka syntax galat.\n-   **Warning:** problem hui, lekin execution continue ho sakta hai.\n-   **Notice:** older PHP versions mein less severe issue ki report.\n-   **Error/Throwable:** serious runtime problems, jaise type error ya\n    undefined function ke liye `Error`.\n\nExact messages aur categories PHP version par depend karte hain."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 24,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "How do you enable error reporting?",
+      "hi": "PHP mein error reporting kaise enable karte hain?"
+    },
+    "answer": {
+      "en": "In development use error_reporting(E_ALL) and display_errors. In production disable display_errors, log securely, and keep Laravel APP_DEBUG=false so internal details are not exposed to users.",
+      "hi": "Local development mein:\n\nProduction mein errors users ko display nahi karne chahiye.\n`display_errors=Off` rakhein aur secure logs mein record karein. Laravel\nmein `APP_DEBUG=false` production ke liye important hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "error_reporting(E_ALL);\nini_set('display_errors', '1');"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 25,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "When do you use require in practice?",
+      "hi": "include aur require ka practical use?"
+    },
+    "answer": {
+      "en": "Use require for essential configuration or reusable code in small scripts. In Laravel, use Composer autoloading and namespaces for classes rather than maintaining manual include lists.",
+      "hi": "Small PHP scripts mein reusable file load karne ke liye use hote hain.\nEssential configuration ya required code ke liye `require` generally\nsuitable hai. Laravel mein class files ke liye manual includes ke bajay\nComposer autoloading aur namespaces use karein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 26,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "What PHP frameworks are available?",
+      "hi": "PHP frameworks kaun se hain?"
+    },
+    "answer": {
+      "en": "Examples include Laravel, Symfony, CodeIgniter, Yii, CakePHP and Slim. Laravel supplies routing, validation, an ORM, queues, caching, migrations and testing tools.",
+      "hi": "Laravel, Symfony, CodeIgniter, Yii, CakePHP aur Slim jaise frameworks.\nLaravel mein routing, validation, ORM, queues, cache, middleware,\nmigrations aur testing ecosystem milta hai."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 27,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "What does PEAR mean?",
+      "hi": "PEAR ka full form?"
+    },
+    "answer": {
+      "en": "PEAR stands for PHP Extension and Application Repository. It is a historical system for reusable PHP components. Composer and Packagist are common in modern PHP dependency management.",
+      "hi": "PEAR = **PHP Extension and Application Repository**. Yeh reusable PHP\ncomponents ka historical repository/framework hai. Modern PHP projects\nmein Composer aur Packagist zyada common dependency-management tools\nhain."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 28,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "urlencode vs urldecode?",
+      "hi": "urlencode() aur urldecode()?"
+    },
+    "answer": {
+      "en": "urlencode encodes a query parameter value and represents spaces as +. urldecode reverses that encoding. Encode individual components, not an entire URL; rawurlencode uses percent encoding for spaces.",
+      "hi": "URL ke query parameter value ko encode/decode karne ke liye use ho sakte\nhain. Whole URL ko blindly encode na karein; context ke mutabik\n`urlencode()` ya `rawurlencode()` choose karein."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$value = 'hello world';\n$encoded = urlencode($value); // hello+world"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 29,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "How do you remove line breaks?",
+      "hi": "String se line breaks kaise remove karein?"
+    },
+    "answer": {
+      "en": "Replace both carriage returns and newlines with str_replace([\"\\r\", \"\\n\"], '', $text). Choose a space instead of an empty string if words must remain separated.",
+      "hi": "Agar line breaks ko spaces se replace karna ho, replacement `''` ki\njagah `' '` dein. Data ka expected format samajh kar transformation\nkarein."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$text = \"Hello\\r\\nWorld\\n\";\n$clean = str_replace([\"\\r\", \"\\n\"], '', $text);"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 30,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "How do you extract a file extension?",
+      "hi": "File extension kaise nikalein/remove karein?"
+    },
+    "answer": {
+      "en": "Use pathinfo with PATHINFO_EXTENSION for the extension and PATHINFO_FILENAME for the basename without it. This is clearer than manually splitting on dots. An extension alone does not establish file safety.",
+      "hi": "Filename ko manually `explode('.')` se handle karne ke bajay\n`pathinfo()` readable option hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$extension = pathinfo('report.pdf', PATHINFO_EXTENSION); // pdf\n$name = pathinfo('report.pdf', PATHINFO_FILENAME);       // report"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 31,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "How do you remove HTML tags?",
+      "hi": "HTML tags kaise remove karein?"
+    },
+    "answer": {
+      "en": "strip_tags removes tags but is not a complete HTML sanitizer. Escape output for its destination context. Removing tags and safely rendering untrusted content are different tasks.",
+      "hi": "`strip_tags()` HTML tags remove kar sakta hai, lekin yeh complete HTML\nsanitization ya XSS protection ka replacement nahi hai. Output context\nke hisaab se escaping karein; HTML render karte waqt appropriate\nescaping use karein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 32,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "What controls upload size?",
+      "hi": "PHP file upload size kaise control hota hai?"
+    },
+    "answer": {
+      "en": "PHP upload_max_filesize and post_max_size, web-server or proxy limits, and application validation all matter. Validate file type, size, authorization and destination. Do not assume a universal default limit.",
+      "hi": "Ek single universal default assume mat karein. Limits PHP configuration\n(`upload_max_filesize`, `post_max_size`), web server/proxy limits aur\napplication validation par depend karti hain. Laravel mein file type,\nsize, authorization aur storage path validate karein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 33,
+    "category": "php",
+    "level": "Foundation",
+    "title": {
+      "en": "How do you increase execution time?",
+      "hi": "PHP script execution time kaise badhate hain?"
+    },
+    "answer": {
+      "en": "max_execution_time and, where supported, set_time_limit control limits. Increasing a limit does not fix slow code. Move long exports and imports to background jobs and measure the bottleneck.",
+      "hi": "Configuration mein `max_execution_time` set kiya ja sakta hai; kuch\ncontexts mein `set_time_limit()` bhi use hota hai. Lekin time limit\nbadhana slow processing ka permanent solution nahi. Large\nexports/imports ko queue/background job mein move karna often better\nhota hai."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 34,
+    "category": "oop",
+    "level": "Foundation",
+    "title": {
+      "en": "What are constructors and destructors?",
+      "hi": "Constructor aur destructor kya hain?"
+    },
+    "answer": {
+      "en": "__construct initializes an object when it is created. __destruct may perform cleanup when the object is destroyed. Avoid relying on destructor timing for critical business operations.",
+      "hi": "`__construct()` object create hone par initialization ke liye chalta\nhai. `__destruct()` object destruction/cleanup ke waqt chal sakta hai,\nlekin exact timing par rely karna risky ho sakta hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "class Report\n{\n    public function __construct(private string $name) {}\n\n    public function getName(): string\n    {\n        return $this->name;\n    }\n}"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 35,
+    "category": "oop",
+    "level": "Foundation",
+    "title": {
+      "en": "public, protected and private?",
+      "hi": "Access modifiers: public, protected, private?"
+    },
+    "answer": {
+      "en": "public is accessible outside the class. protected is accessible in the class and subclasses. private is accessible in the declaring class. Restrict access to protect the object's valid state.",
+      "hi": "-   `public`: class ke bahar se bhi accessible.\n-   `protected`: class aur subclasses ke scope mein accessible.\n-   `private`: sirf us class ke andar accessible jahan define kiya gaya.\n\nEncapsulation ke liye properties ko default public rakhne ke bajay\naccess ko carefully choose karein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 36,
+    "category": "oop",
+    "level": "Foundation",
+    "title": {
+      "en": "What is inheritance?",
+      "hi": "Inheritance kya hai?"
+    },
+    "answer": {
+      "en": "A child class extends a parent and inherits accessible members. It can specialize behavior. Use inheritance for a genuine is-a relationship, not merely to reuse unrelated code.",
+      "hi": "Child class parent class ke accessible properties/methods inherit kar\nsakti hai. PHP mein class inheritance `extends` se hoti hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "class Animal {\n    public function speak(): string { return 'Sound'; }\n}\nclass Dog extends Animal {}"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 37,
+    "category": "oop",
+    "level": "Foundation",
+    "title": {
+      "en": "Does PHP support multiple inheritance?",
+      "hi": "Kya PHP multiple inheritance support karta hai?"
+    },
+    "answer": {
+      "en": "A class can extend only one class, but it can implement several interfaces and use several traits. Interfaces provide contracts; traits reuse implementation. They are not multiple parent classes.",
+      "hi": "PHP class ek hi parent class `extend` kar sakti hai, lekin multiple\ninterfaces implement kar sakti hai aur multiple traits use kar sakti\nhai. Interface contract batata hai; trait reusable method implementation\ndeta hai."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 38,
+    "category": "oop",
+    "level": "Foundation",
+    "title": {
+      "en": "What are traits?",
+      "hi": "Traits kya hain?"
+    },
+    "answer": {
+      "en": "Traits reuse methods across classes without making them part of one inheritance hierarchy. For example, unrelated models may share a reference-formatting method. Avoid hiding excessive dependencies inside traits.",
+      "hi": "Trait multiple unrelated classes mein methods reuse karne ka mechanism\nhai. Trait class nahi hota aur object hierarchy ka substitute nahi hona\nchahiye."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "trait HasReference {\n    public function referencePrefix(): string {\n        return 'REF-';\n    }\n}\nclass Invoice {\n    use HasReference;\n}"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 39,
+    "category": "oop",
+    "level": "Foundation",
+    "title": {
+      "en": "Abstract class vs interface?",
+      "hi": "Abstract class vs interface?"
+    },
+    "answer": {
+      "en": "An interface defines a contract. An abstract class can also provide shared state and implementation. A class may implement multiple interfaces but extend only one class.",
+      "hi": "Interface contract define karta hai. Abstract class contract ke saath\nshared implementation/state bhi de sakti hai. Class multiple interfaces\nimplement kar sakti hai lekin ek class extend karti hai."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 40,
+    "category": "oop",
+    "level": "Foundation",
+    "title": {
+      "en": "What are the four OOP pillars?",
+      "hi": "OOP ke four pillars?"
+    },
+    "answer": {
+      "en": "Encapsulation groups data and behavior. Abstraction hides unnecessary details. Inheritance specializes existing behavior. Polymorphism lets different implementations work through the same contract.",
+      "hi": "-   **Encapsulation:** data aur behavior ko ek unit mein rakhna.\n-   **Abstraction:** unnecessary internal detail chhupana.\n-   **Inheritance:** existing class se specialize behavior lena.\n-   **Polymorphism:** same interface ke through different\n    implementations use karna."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 41,
+    "category": "oop",
+    "level": "Foundation",
+    "title": {
+      "en": "What are SOLID principles?",
+      "hi": "SOLID principles kya hain?"
+    },
+    "answer": {
+      "en": "Single responsibility, open/closed, Liskov substitution, interface segregation and dependency inversion. For example, a checkout service can depend on a focused PaymentGateway interface rather than one specific provider.",
+      "hi": "-   **S --- Single Responsibility:** ek class ka focused responsibility\n    ho.\n-   **O --- Open/Closed:** extension aasaan ho, stable code ko baar-baar\n    modify na karna pade.\n-   **L --- Liskov Substitution:** child implementation parent contract\n    ko tod na de.\n-   **I --- Interface Segregation:** chhote, focused interfaces.\n-   **D --- Dependency Inversion:** high-level logic concrete class ke\n    bajay abstraction par depend kare.\n\nExample: checkout service `PaymentGateway` interface use kare; alag\ngateways usko implement kar sakte hain."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 42,
+    "category": "oop",
+    "level": "Foundation",
+    "title": {
+      "en": "What is dependency injection?",
+      "hi": "Dependency Injection kya hai?"
+    },
+    "answer": {
+      "en": "An object receives its collaborators instead of constructing them internally. Injecting a payment gateway into checkout makes it easier to replace the provider or use a test double. Laravel's container can resolve the dependency.",
+      "hi": "Class apni dependencies khud banane ke bajay bahar se receive karti hai.\nIsse code loosely coupled aur testable hota hai.\n\nLaravel service container interface ko concrete implementation se bind\nkarke dependency inject kar sakta hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "class CheckoutService {\n    public function __construct(private PaymentGateway $gateway) {}\n}"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 43,
+    "category": "oop",
+    "level": "Foundation",
+    "title": {
+      "en": "Composition vs inheritance?",
+      "hi": "Composition vs inheritance?"
+    },
+    "answer": {
+      "en": "Inheritance expresses is-a. Composition expresses has-a or delegates work to another object. A checkout service using a payment gateway is composition; it allows the gateway behavior to vary independently.",
+      "hi": "Inheritance ka relation \"is-a\" hota hai; composition ka relation \"has-a\"\nya delegated behavior hota hai. Checkout service ka payment gateway ko\ndependency ke roop mein use karna composition hai. Independent behavior\nchange karna ho to composition often flexible hoti hai."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 44,
+    "category": "oop",
+    "level": "Foundation",
+    "title": {
+      "en": "What design patterns are useful?",
+      "hi": "Design patterns ke examples?"
+    },
+    "answer": {
+      "en": "Strategy swaps algorithms, Factory creates objects, Adapter wraps an external interface, Observer reacts to events, and Decorator adds behavior. Add a pattern only when it solves a real problem.",
+      "hi": "-   Strategy: interchangeable payment provider/algorithm.\n-   Factory: object create karna.\n-   Adapter: external API ko internal contract mein wrap karna.\n-   Observer/Event: kisi event par response dena.\n-   Decorator: existing behavior ke around extra behavior add karna.\n-   Repository: data access abstraction, jab actual project mein useful\n    ho.\n\nHar class ke liye interface/repository banana zaroori nahi; abstraction\nka real benefit hona chahiye."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 45,
+    "category": "oop",
+    "level": "Foundation",
+    "title": {
+      "en": "What did PHP 8 introduce?",
+      "hi": "PHP 8 ke important features?"
+    },
+    "answer": {
+      "en": "Examples include union types, named arguments, property promotion, match and the nullsafe operator. PHP 8.1 added enums, readonly properties, intersection types and Fibers; 8.2 added readonly classes. Explain a concrete use case.",
+      "hi": "Union types, named arguments, constructor property promotion, `match`,\nnullsafe operator `?->`, enums (PHP 8.1), readonly properties (8.1),\nreadonly classes (8.2), intersection types (8.1) aur Fibers (8.1).\nInterview mein feature ke saath apne project ka example bhi batayein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 46,
+    "category": "coding",
+    "level": "Foundation",
+    "title": {
+      "en": "What is the output of '5' + 2?",
+      "hi": "'5' + 2 ka output?"
+    },
+    "answer": {
+      "en": "The output is 7. PHP treats the numeric string as a number in arithmetic. This is type juggling. Validate external input before relying on numeric conversion.",
+      "hi": "PHP numeric string ko number mein convert kar sakta hai. Isko type\njuggling kehte hain. Real code mein input validation zaroori hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$x = '5';\n$y = 2;\necho $x + $y; // 7"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 47,
+    "category": "coding",
+    "level": "Foundation",
+    "title": {
+      "en": "Is $x++ + ++$x safe to reason about?",
+      "hi": "$x = 5; echo $x++ + ++$x; ka answer?"
+    },
+    "answer": {
+      "en": "Do not depend on evaluation order within this expression. PHP does not generally specify operand evaluation order. Split it into $a = $x++; $b = ++$x; echo $a + $b; to make the sequence explicit. Starting at 5, those separate statements print 12.",
+      "hi": "Is mixed expression ke operand evaluation order par depend mat karo. PHP generally order guarantee nahi karta. Alag statements likho: $a = $x++; phir $b = ++$x; phir echo $a + $b;. Agar $x pehle 5 tha, in separate statements ka output 12 hoga."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$x = 5;\n$a = $x++;\n$b = ++$x;\necho $a + $b;"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 48,
+    "category": "coding",
+    "level": "Foundation",
+    "title": {
+      "en": "What does the reference sum print?",
+      "hi": "References ka output?"
+    },
+    "answer": {
+      "en": "After $y =& $x and $y += 5, both names see 15. Adding $x and $y prints 30. This is shared storage, not two independent copies.",
+      "hi": "Dono reference se linked hain; `$y` update karne par `$x` bhi 15 hota\nhai. Final sum 15 + 15 = 30."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$x = 10;\n$y = &$x;\n$y += 5;\necho $x + $y; // 30"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 49,
+    "category": "coding",
+    "level": "Foundation",
+    "title": {
+      "en": "What happens when a reference is reassigned?",
+      "hi": "Reference assignment ke baad output kya hai?"
+    },
+    "answer": {
+      "en": "If $basket references $fruit, assigning 'banana' to $basket changes the value seen by $fruit too. Both names refer to the same value.",
+      "hi": "`$basket` aur `$fruit` linked reference hain."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$fruit = 'apple';\n$basket =& $fruit;\n$basket = 'banana';\necho $fruit; // banana"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 50,
+    "category": "coding",
+    "level": "Foundation",
+    "title": {
+      "en": "Can an alias survive unset?",
+      "hi": "unset() reference example?"
+    },
+    "answer": {
+      "en": "Yes. Removing the original variable name does not remove the alias. The alias can still print 'Hello'. Think of removing one label rather than destroying all access to the value.",
+      "hi": "Original variable name unset hua; alias abhi bhi value access karta hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$original = 'Hello';\n$alias =& $original;\nunset($original);\necho $alias; // Hello"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 51,
+    "category": "coding",
+    "level": "Foundation",
+    "title": {
+      "en": "How do you find the least frequent number?",
+      "hi": "Array mein least frequent number kaise find karein?"
+    },
+    "answer": {
+      "en": "Count values with array_count_values, sort frequencies with asort to preserve keys, then read array_key_first. Define tie behavior and handle an empty input. In the supplied example, 6 appears only once.",
+      "hi": "Is input mein `6` ek baar aata hai, baaki values zyada baar. Agar\nmultiple numbers ki same minimum frequency ho, to tie-breaking rule\ndefine karein."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$numbers = [1,1,2,3,3,1,2,4,5,4,6,5,7,7];\n\n$counts = array_count_values($numbers);\nasort($counts); // frequency ascending, keys preserved\n\n$leastFrequentNumber = array_key_first($counts);\necho $leastFrequentNumber; // 6 for this input"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 52,
+    "category": "coding",
+    "level": "Foundation",
+    "title": {
+      "en": "How do you count each vowel?",
+      "hi": "Har vowel ka count kaise nikaalein?"
+    },
+    "answer": {
+      "en": "Lowercase the text, initialize a counter for each vowel, then iterate through characters and increment matching counters. Keeping all five counters also shows vowels that occur zero times. This example assumes ASCII text.",
+      "hi": "Pehle lowercase karte hain, phir har character ko check karte hain. Is\nexample mein zero-count vowels bhi output mein rehte hain."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$text = strtolower('Hello World, This is a PHP Program.');\n$counts = ['a'=>0, 'e'=>0, 'i'=>0, 'o'=>0, 'u'=>0];\n\nforeach (str_split($text) as $char) {\n    if (array_key_exists($char, $counts)) {\n        $counts[$char]++;\n    }\n}\nprint_r($counts);"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 53,
+    "category": "coding",
+    "level": "Foundation",
+    "title": {
+      "en": "How do you turn key-value pairs into rows?",
+      "hi": "Associative array ko multidimensional array mein convert karein."
+    },
+    "answer": {
+      "en": "Iterate with foreach ($data as $key => $value) and append [$key, $value] to a new array. Each original entry becomes one two-element row.",
+      "hi": "Har key-value pair ko ek inner array banaya gaya hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$data = ['x' => 'A', 'y' => 'B', 'z' => 'C'];\n$output = [];\n\nforeach ($data as $key => $value) {\n    $output[] = [$key, $value];\n}\nprint_r($output);\n// [['x','A'], ['y','B'], ['z','C']]"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 54,
+    "category": "coding",
+    "level": "Foundation",
+    "title": {
+      "en": "How do you add hours, minutes and seconds?",
+      "hi": "Current time mein 5000 hours, 500 minutes, 50 seconds add karein."
+    },
+    "answer": {
+      "en": "Convert hours to seconds by multiplying by 3600, minutes by 60, then add the seconds to a timestamp. Use DateTimeImmutable or Carbon when calendar and timezone behavior matters.",
+      "hi": "Hours ko seconds mein convert karne ke liye `hours * 3600`, minutes ke\nliye `minutes * 60`. Real applications mein timezone ke liye\n`DateTimeImmutable`/Carbon use karna often clearer hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$timestamp = time() + (5000 * 3600) + (500 * 60) + 50;\necho date('Y-m-d H:i:s', $timestamp);"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 55,
+    "category": "coding",
+    "level": "Foundation",
+    "title": {
+      "en": "How do you check a palindrome?",
+      "hi": "Palindrome check kaise karein?"
+    },
+    "answer": {
+      "en": "Normalize case and remove the characters your rules ignore, then compare the text with its reverse. 'Madam' becomes 'madam' and matches. The supplied regex and strrev example is ASCII-oriented.",
+      "hi": "Palindrome aage aur peeche se same hota hai. Unicode/multilingual text\nke liye mbstring-aware logic chahiye ho sakta hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "function isPalindrome(string $text): bool {\n    $text = strtolower(preg_replace('/[^a-z0-9]/i', '', $text));\n    return $text === strrev($text);\n}\nvar_dump(isPalindrome('Madam')); // true"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 56,
+    "category": "coding",
+    "level": "Foundation",
+    "title": {
+      "en": "How do you reverse a string?",
+      "hi": "String reverse kaise karein?"
+    },
+    "answer": {
+      "en": "strrev reverses bytes and works for simple ASCII strings. 'Laravel' becomes 'levaraL'. Use a multibyte or grapheme-aware approach for Unicode text.",
+      "hi": "Simple ASCII strings ke liye kaafi hai. Unicode characters ke liye\n`strrev()` byte-based behavior de sakta hai, isliye multibyte-safe\napproach choose karein."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "echo strrev('Laravel'); // levaraL"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 57,
+    "category": "coding",
+    "level": "Foundation",
+    "title": {
+      "en": "How do you find duplicate values?",
+      "hi": "Array mein duplicate values kaise find karein?"
+    },
+    "answer": {
+      "en": "Count occurrences, keep counts greater than one, then take the keys. For [1,2,2,3,4,4], the duplicated values are 2 and 4. array_count_values supports integer and string values.",
+      "hi": "Pehle array_count_values se har value ki frequency gino. Phir array_filter se count 1 se zyada wale entries rakho. Unki keys duplicate values hain: is example mein 2 aur 4."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$values = [1, 2, 2, 3, 4, 4];\n$counts = array_count_values($values);\n$duplicates = array_keys(array_filter($counts, fn($count) => $count > 1));\nprint_r($duplicates); // [2, 4]"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 58,
+    "category": "coding",
+    "level": "Foundation",
+    "title": {
+      "en": "How do you count words?",
+      "hi": "String mein words count kaise karein?"
+    },
+    "answer": {
+      "en": "str_word_count works for basic English-like text. 'PHP makes web apps' contains four words. Use a Unicode-aware tokenizer when the application's language rules require it.",
+      "hi": "Yeh basic English-like text ke liye hai. Multilingual text ke liye\nUnicode-aware tokenizer better ho sakta hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$text = 'PHP makes web apps';\necho str_word_count($text); // 4"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 59,
+    "category": "coding",
+    "level": "Foundation",
+    "title": {
+      "en": "How do you swap two variables?",
+      "hi": "Do variables swap kaise karein?"
+    },
+    "answer": {
+      "en": "Use [$a, $b] = [$b, $a]. A temporary variable is equally valid. Choose readability instead of arithmetic tricks that may overflow or obscure intent.",
+      "hi": "Temporary variable wala method bhi bilkul valid hai. Readability ko\nclever tricks se zyada preference dein."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$a = 10;\n$b = 20;\n[$a, $b] = [$b, $a];"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 60,
+    "category": "coding",
+    "level": "Foundation",
+    "title": {
+      "en": "How do you sort an array?",
+      "hi": "Array ko ascending/descending kaise sort karein?"
+    },
+    "answer": {
+      "en": "sort and rsort reorder values ascending and descending and reindex numeric keys. asort and arsort preserve key associations. Choose the function based on whether keys carry meaning.",
+      "hi": "Associative keys preserve karni hon to `asort()`/`arsort()` use karein."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$numbers = [4, 1, 9, 2];\nsort($numbers);  // ascending, numeric keys reindex\nrsort($numbers); // descending, numeric keys reindex"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 61,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "Explain the Laravel request lifecycle.",
+      "hi": "Laravel request lifecycle explain karein."
+    },
+    "answer": {
+      "en": "A request enters public/index.php, loads Composer and bootstraps Laravel. Middleware runs, a route is matched, and the controller or service performs work. The response passes back through middleware to the client. Internal details depend on Laravel version.",
+      "hi": "Request `public/index.php` se enter hoti hai, Composer autoloader aur\nLaravel bootstrap hote hain, middleware run hota hai, router route match\nkarta hai, controller/services/database ka kaam hota hai, phir response\nmiddleware ke through client tak response jaata hai. Exact internals\nLaravel version ke hisaab se vary kar sakte hain."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 62,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "What is the service container?",
+      "hi": "Service Container kya hai?"
+    },
+    "answer": {
+      "en": "The container resolves classes and injects their dependencies. A controller can request a service in its constructor instead of constructing every dependency manually. Bind interfaces to concrete implementations where needed.",
+      "hi": "Laravel ka service container classes ki dependencies resolve aur inject\nkarta hai. Isse controller/service ko `new SomeClass()` karke dependency\nbanane ki zaroorat har jagah nahi hoti."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 63,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "bind vs singleton?",
+      "hi": "bind() aur singleton() mein difference?"
+    },
+    "answer": {
+      "en": "bind usually resolves a fresh instance. singleton reuses the same resolved instance within the container. Be careful with mutable request-specific state in long-running workers.",
+      "hi": "`bind()` normal resolution par naya instance resolve karta hai.\n`singleton()` container mein resolved instance reuse karta hai. Stateful\nsingleton ko long-running workers mein carefully design karein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 64,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "What does a service provider do?",
+      "hi": "Service Provider kya karta hai?"
+    },
+    "answer": {
+      "en": "A provider registers and boots application services. Put container bindings in register(). Put setup that needs registered services in boot(). This keeps application initialization organized.",
+      "hi": "Service Provider application services ko register aur bootstrap karne ki\njagah hai. `register()` mein container bindings aur `boot()` mein aise\nsetup kaam hote hain jo registered services par depend karte hain."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 65,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "What is middleware?",
+      "hi": "Middleware kya hai?"
+    },
+    "answer": {
+      "en": "Middleware checks or changes requests before the controller and can process the response afterwards. Authentication, rate limiting, tenant identification and request logging are common uses.",
+      "hi": "Middleware request ko controller tak pahunchne se pehle check/modify kar\nsakta hai aur response par bhi kaam kar sakta hai. Examples:\nauthentication, rate limiting, tenant identification, logging."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 66,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "Authentication vs authorization?",
+      "hi": "Authentication vs Authorization?"
+    },
+    "answer": {
+      "en": "Authentication establishes who the caller is. Authorization checks what the caller may do. Logging in must not automatically permit editing another user's record; check ownership or a policy.",
+      "hi": "Authentication = \"Aap kaun hain?\" Authorization = \"Aapko kya karne ki\npermission hai?\" Login hona kisi aur user ka record edit karne ki\npermission automatically nahi deta."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 67,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "Sanctum vs Passport?",
+      "hi": "Sanctum vs Passport?"
+    },
+    "answer": {
+      "en": "Sanctum supports SPA cookie authentication and simple API tokens. Passport supplies an OAuth 2.0 authorization server. Choose based on the integration's requirements rather than adding OAuth complexity by default.",
+      "hi": "Sanctum SPA cookie authentication aur simple API tokens ke liye suitable\nhai. Passport full OAuth 2.0 server functionality ke liye hai.\nRequirements ke basis par choose karein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 68,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "What are Eloquent relationships?",
+      "hi": "Eloquent relationships kaun se hain?"
+    },
+    "answer": {
+      "en": "Examples include hasOne, hasMany, belongsTo, belongsToMany, hasManyThrough and polymorphic relationships. Also consider foreign keys, indexes, deletion behavior and how related records are loaded.",
+      "hi": "`hasOne`, `hasMany`, `belongsTo`, `belongsToMany`, `hasManyThrough`, aur\npolymorphic relations jaise `morphMany`. Relationship ke saath foreign\nkey, indexes, deletion behavior aur loading strategy bhi consider\nkarein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 69,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "What is the N+1 query problem?",
+      "hi": "N+1 query problem kya hai?"
+    },
+    "answer": {
+      "en": "One query loads parent records, then accessing a relation triggers a query for each parent. With 20 orders, that can mean 21 queries. Eager loading the user relation can reduce this to two for a typical belongsTo relation. Verify using query logs.",
+      "hi": "Pehle parent records ki ek query, phir har record ke liye related data\nki alag query chalna N+1 issue hai.\n\nQuery logs aur execution plans se confirm karein ke actual bottleneck\nkya hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "// Problematic\n$orders = Order::all();\nforeach ($orders as $order) echo $order->user->name;\n\n// Eager load\n$orders = Order::with('user')->get();"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 70,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "with(), load() and whereHas()?",
+      "hi": "with(), load(), whereHas()?"
+    },
+    "answer": {
+      "en": "with loads relations as part of the initial retrieval workflow. load loads them after models have been retrieved. whereHas filters parents using a condition on related records; it does not itself eager-load them.",
+      "hi": "-   `with()`: initial query workflow mein relation eager-load.\n-   `load()`: models milne ke baad relation load.\n-   `whereHas()`: related records ki condition ke basis par parent\n    filter."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 71,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "find(), first(), get() and value()?",
+      "hi": "find(), first(), get(), value()?"
+    },
+    "answer": {
+      "en": "find looks up a primary key. first returns the first matching model or null. get returns a collection. value returns one column from the first matching record. Select the shape your caller needs.",
+      "hi": "`find($id)` primary key se model; `first()` first matching model ya\n`null`; `get()` collection; `value('email')` first matching record ka\nspecific column value."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 72,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "create(), save(), update() and insert()?",
+      "hi": "create(), save(), update(), insert()?"
+    },
+    "answer": {
+      "en": "create mass-assigns a new model; save inserts or updates an instance. update behaves differently on a model and a query. Query-builder insert writes rows without returning an Eloquent model. Bulk queries do not fire individual model events.",
+      "hi": "`create()` mass assignment se Eloquent model create karta hai; `save()`\nmodel insert/update karta hai; `update()` model ya query ke context par\ndepend karta hai; query builder ka `insert()` direct insert karta hai\naur model instance return nahi karta. Query-level bulk operations\nindividual Eloquent model events run nahi karte."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 73,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "What is mass assignment?",
+      "hi": "Mass assignment vulnerability kya hai?"
+    },
+    "answer": {
+      "en": "Passing every request field to a model can let a caller set sensitive attributes. Validate an explicit set of fields and configure fillable or guarded. Validation and permission checks are both needed.",
+      "hi": "Client se aayi saari fields ko directly model mein pass karne par\nsensitive fields bhi set ho sakti hain.\n\nValidated fields aur `$fillable`/`$guarded` ka use karein.\n`request()->all()` ko blindly model mein pass na karein."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$data = $request->validate([\n    'name' => ['required', 'string', 'max:255'],\n    'email' => ['required', 'email'],\n]);\n$user = User::create($data);"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 74,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "What is a Form Request?",
+      "hi": "Form Request kya hai?"
+    },
+    "answer": {
+      "en": "A Form Request groups validation and authorization outside the controller. It makes input rules easier to test and reuse while letting the controller focus on the use case.",
+      "hi": "Form Request validation aur authorization rules ko controller se\nseparate karta hai. Isse controller clean aur validation\nreusable/testable hoti hai."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 75,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "How do database transactions work?",
+      "hi": "Database transaction kaise use hoti hai?"
+    },
+    "answer": {
+      "en": "DB::transaction commits successful database work and rolls back if an exception escapes the callback. It does not undo an external payment API call. Design external effects and retries separately.",
+      "hi": "Exception transaction se escape kare to rollback hota hai. External\npayment API ka side effect database rollback se undo nahi hota."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "DB::transaction(function () use ($data) {\n    $order = Order::create($data);\n    Payment::create([\n        'order_id' => $order->id,\n        'status' => 'pending',\n    ]);\n});"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 76,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "What are jobs and queues?",
+      "hi": "Jobs aur queues kya hain?"
+    },
+    "answer": {
+      "en": "Queues move work such as emails, exports and imports outside the HTTP request. A worker processes dispatched jobs. Plan retries, backoff, timeouts, failed-job handling and idempotency.",
+      "hi": "Heavy work ko HTTP request se bahar background mein process karna.\nExamples: email, Excel export, bulk import, webhook processing.\n\nRetry, backoff, timeout, failed jobs aur idempotency samajhna zaroori\nhai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "GenerateReportJob::dispatch($reportId);"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 77,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "Events, listeners and observers?",
+      "hi": "Events, Listeners, Observers?"
+    },
+    "answer": {
+      "en": "An event announces that something happened. A listener reacts to it. An observer groups handlers for model lifecycle events. Consider transaction commit timing and reliable delivery for important workflows.",
+      "hi": "Event batata hai \"kuch hua\"; listener event par response deta hai;\nobserver model lifecycle events (`created`, `updated`, `deleted`) handle\nkarta hai. Critical workflows mein transaction commit aur reliable\ndelivery consider karein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 78,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "What is caching?",
+      "hi": "Laravel cache kya hai?"
+    },
+    "answer": {
+      "en": "Caching reuses a stored result to avoid repeated queries or computation. Cache::remember returns a cached value or calculates and stores it. Design keys, expiry and invalidation so stale data is acceptable.",
+      "hi": "Frequently reused data ko cache mein rakhkar repeated\ndatabase/computation work reduce karna.\n\nCache invalidation, TTL, stale data aur key design important hain."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$products = Cache::remember(\n    'active-products',\n    now()->addMinutes(10),\n    fn () => Product::where('active', true)->get()\n);"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 79,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "What is an API Resource?",
+      "hi": "API Resource kya hai?"
+    },
+    "answer": {
+      "en": "A Resource transforms a model into an explicit public JSON representation. It separates database structure from the API contract and helps avoid accidental exposure of sensitive fields.",
+      "hi": "API Resource model ko controlled JSON response mein transform karta hai.\nIsse database schema aur public API response alag rehte hain aur\nsensitive fields expose hone ka risk kam hota hai."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 80,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "Soft delete vs hard delete?",
+      "hi": "Soft delete vs hard delete?"
+    },
+    "answer": {
+      "en": "A hard delete removes the row. A soft delete sets deleted_at and normally hides the row from Eloquent queries. Consider restoration, retention requirements and unique constraints.",
+      "hi": "Hard delete row ko physically remove karta hai. Soft delete `deleted_at`\nset karta hai aur normal Eloquent queries se row ko hide karta hai.\nRetention/privacy rules aur unique constraints bhi consider karein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 81,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "How would you secure a Laravel API?",
+      "hi": "Laravel API ko secure kaise karenge?"
+    },
+    "answer": {
+      "en": "Use authentication, per-resource authorization, input validation, rate limits and HTTPS. Protect secrets, validate uploads, use bound SQL parameters, and avoid exposing private fields or sensitive error details.",
+      "hi": "Authentication, authorization/policies, validation, rate limiting,\nHTTPS, safe file uploads, secrets management, SQL injection prevention,\nsecure error responses, aur sensitive logs se bachna. API response mein\nprivate fields expose na karein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 82,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "How do you investigate a slow app?",
+      "hi": "Laravel app slow ho to kya karenge?"
+    },
+    "answer": {
+      "en": "Measure endpoint latency, query counts, execution plans, indexes, external calls and response sizes. Apply a targeted fix, such as eager loading or caching, then measure again. Do not guess at the bottleneck.",
+      "hi": "Pehle measure karein: slow endpoint, query logs, N+1, execution plan,\nindexes, external API latency, response size. Phir measured fix apply\nkarein---query optimization, appropriate caching, pagination,\nqueues---and result dobara measure karein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 83,
+    "category": "laravel",
+    "level": "Intermediate",
+    "title": {
+      "en": "How do you test Laravel?",
+      "hi": "Laravel tests kaise likhenge?"
+    },
+    "answer": {
+      "en": "Unit tests isolate business logic. Feature tests exercise HTTP behavior. Integration tests check collaborating components. Factories, actingAs, HTTP assertions and queue or mail fakes help verify behavior and failure paths.",
+      "hi": "Unit tests business logic ko isolate karte hain; feature tests HTTP\nrequest aur app behavior test karte hain; integration tests\ncomponents/services ka interaction. Laravel factories, `actingAs()`,\nHTTP assertions, queue/mail fakes aur database test helpers use kiye ja\nsakte hain."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 84,
+    "category": "sql",
+    "level": "Intermediate",
+    "title": {
+      "en": "WHERE vs HAVING?",
+      "hi": "WHERE vs HAVING?"
+    },
+    "answer": {
+      "en": "WHERE filters rows before grouping. HAVING filters grouped or aggregated results. For example, filter active employees with WHERE, then keep departments with more than five employees using HAVING COUNT(*) > 5.",
+      "hi": "`WHERE` rows ko grouping se pehle filter karta hai. `HAVING` grouped\nresults/aggregate condition filter karta hai."
+    },
+    "code": [
+      {
+        "language": "sql",
+        "text": "SELECT department_id, COUNT(*) AS total\nFROM employees\nWHERE status = 'active'\nGROUP BY department_id\nHAVING COUNT(*) > 5;"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 85,
+    "category": "sql",
+    "level": "Intermediate",
+    "title": {
+      "en": "INNER JOIN vs LEFT JOIN?",
+      "hi": "INNER JOIN vs LEFT JOIN?"
+    },
+    "answer": {
+      "en": "INNER JOIN returns matches from both sides. LEFT JOIN keeps every left-side row and fills right-side columns with null when no match exists. Check how later WHERE conditions affect unmatched rows.",
+      "hi": "`INNER JOIN` sirf matching rows deta hai. `LEFT JOIN` left table ki\nsaari rows deta hai, aur unmatched right side ke columns `NULL` hote\nhain."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 86,
+    "category": "sql",
+    "level": "Intermediate",
+    "title": {
+      "en": "UNION vs UNION ALL?",
+      "hi": "UNION vs UNION ALL?"
+    },
+    "answer": {
+      "en": "UNION removes duplicate result rows. UNION ALL preserves duplicates and avoids deduplication work. Use ALL when duplicate rows are valid or impossible by design.",
+      "hi": "`UNION` duplicate rows eliminate karta hai. `UNION ALL` duplicates ko\npreserve karta hai aur deduplication work nahi karta."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 87,
+    "category": "sql",
+    "level": "Intermediate",
+    "title": {
+      "en": "DELETE, TRUNCATE and DROP?",
+      "hi": "DELETE, TRUNCATE, DROP?"
+    },
+    "answer": {
+      "en": "DELETE removes rows and supports WHERE. TRUNCATE removes all rows and in MySQL is a DDL operation that generally implicitly commits. DROP removes the table itself. They are not interchangeable.",
+      "hi": "`DELETE` rows remove karta hai aur `WHERE` support karta hai. `TRUNCATE`\ntable ke saare rows remove karta hai; MySQL mein yeh DDL operation hai\naur generally implicit commit karta hai. `DROP` table structure hi\nremove karta hai. Inhe interchangeable na samjhein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 88,
+    "category": "sql",
+    "level": "Intermediate",
+    "title": {
+      "en": "What is an index?",
+      "hi": "Index kya hai?"
+    },
+    "answer": {
+      "en": "An index helps locate rows without scanning everything. It costs storage and makes writes more expensive. Choose indexes for actual query patterns and verify the execution plan.",
+      "hi": "Index data ko efficiently find karne mein help karta hai. Index reads ko\nspeed up kar sakta hai, lekin disk space aur writes ka cost hota hai.\nActual query pattern aur `EXPLAIN` dekh kar index choose karein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 89,
+    "category": "sql",
+    "level": "Intermediate",
+    "title": {
+      "en": "Why does composite index order matter?",
+      "hi": "Composite index mein column order important kyun hai?"
+    },
+    "answer": {
+      "en": "An index on (customer_id, status) can generally help with customer_id alone or both fields. A status-only lookup may not benefit in the same way. This is the leftmost-prefix principle.",
+      "hi": "Index `(customer_id, status)` generally `customer_id` alone aur dono\ncolumns ke lookup ko support kar sakta hai; sirf `status` query ko same\ntarah support nahi karega. Isse leftmost-prefix principle kehte hain."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 90,
+    "category": "sql",
+    "level": "Intermediate",
+    "title": {
+      "en": "Clustered vs secondary indexes?",
+      "hi": "Primary/clustered index vs secondary index in InnoDB?"
+    },
+    "answer": {
+      "en": "In InnoDB, clustered-index leaf pages contain row data, usually ordered by the primary key. Secondary entries contain their indexed columns plus the primary key; retrieving other columns can require another lookup.",
+      "hi": "InnoDB clustered index ke leaf pages mein row data hota hai, usually\nprimary key ke order par. Secondary index indexed values aur primary key\nstore karta hai; full row ke liye additional lookup lag sakta hai."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 91,
+    "category": "sql",
+    "level": "Intermediate",
+    "title": {
+      "en": "What is normalization?",
+      "hi": "Normalization kya hai?"
+    },
+    "answer": {
+      "en": "Normalization organizes tables to reduce duplication and update anomalies. 1NF uses atomic values; 2NF removes partial-key dependencies; 3NF avoids inappropriate transitive dependencies. Denormalize only for a measured need.",
+      "hi": "Database tables ko aise organize karna ki unnecessary duplication aur\nupdate anomalies kam hon. 1NF: atomic values; 2NF: non-key attributes\npoore candidate key par depend hon; 3NF: inappropriate transitive\ndependencies avoid hon. Performance ke liye kabhi measured\ndenormalization bhi ki ja sakti hai."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 92,
+    "category": "sql",
+    "level": "Intermediate",
+    "title": {
+      "en": "What does ACID mean?",
+      "hi": "ACID properties?"
+    },
+    "answer": {
+      "en": "Atomicity: all or none. Consistency: preserve constraints and invariants. Isolation: control concurrent transactions. Durability: committed data persists according to database guarantees.",
+      "hi": "Atomicity: transaction as a unit succeed/fail. Consistency:\nconstraints/invariants preserve hon. Isolation: concurrent transactions\ncontrolled hon. Durability: committed data database guarantees ke\nmutabik persist kare."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 93,
+    "category": "sql",
+    "level": "Intermediate",
+    "title": {
+      "en": "What is a deadlock?",
+      "hi": "Deadlock kya hai?"
+    },
+    "answer": {
+      "en": "Transactions wait for locks held by one another. Use a consistent lock order, short transactions and suitable indexes. Retry recognized deadlock failures only when repeating the operation is safe.",
+      "hi": "Do transactions ek dusre ke locks ka wait kar rahi hoti hain. Isse\nbachne ke liye locks consistent order mein lein, transaction short\nrakhein, indexes sahi rakhein, aur recognized deadlock par safe retry\nkarein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 94,
+    "category": "sql",
+    "level": "Intermediate",
+    "title": {
+      "en": "How do COUNT variants differ?",
+      "hi": "COUNT(*), COUNT(column), COUNT(DISTINCT column)?"
+    },
+    "answer": {
+      "en": "COUNT(*) counts rows. COUNT(column) counts non-null values. COUNT(DISTINCT column) counts distinct non-null values. Null handling often explains unexpected differences.",
+      "hi": "`COUNT(*)` rows count karta hai. `COUNT(column)` non-NULL values count\nkarta hai. `COUNT(DISTINCT column)` unique non-NULL values count karta\nhai."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 95,
+    "category": "sql",
+    "level": "Intermediate",
+    "title": {
+      "en": "GROUP BY vs DISTINCT?",
+      "hi": "GROUP BY vs DISTINCT?"
+    },
+    "answer": {
+      "en": "DISTINCT removes duplicate result rows. GROUP BY forms groups, commonly for COUNT, SUM or AVG. Choose based on whether you need unique rows or an aggregate per group.",
+      "hi": "`DISTINCT` duplicate result rows remove karta hai. `GROUP BY` rows ko\ngroups mein arrange karta hai, commonly `COUNT`, `SUM`, `AVG` jaise\naggregates ke liye."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 96,
+    "category": "sql",
+    "level": "Intermediate",
+    "title": {
+      "en": "Find the second-highest distinct salary.",
+      "hi": "Second-highest distinct salary kaise find karein?"
+    },
+    "answer": {
+      "en": "Select the maximum salary strictly below the overall maximum. Repeated highest salaries are excluded together. If there is no second distinct value, the result is null.",
+      "hi": "No second distinct salary ho to `NULL` aayega."
+    },
+    "code": [
+      {
+        "language": "sql",
+        "text": "SELECT MAX(salary) AS second_highest\nFROM employees\nWHERE salary < (SELECT MAX(salary) FROM employees);"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 97,
+    "category": "sql",
+    "level": "Intermediate",
+    "title": {
+      "en": "How do you find duplicate emails?",
+      "hi": "Duplicate emails kaise find karein?"
+    },
+    "answer": {
+      "en": "Group non-null emails and keep groups with COUNT(*) > 1. Clean up duplicates, then consider a suitable unique constraint to prevent recurrence. Decide the desired case and collation behavior.",
+      "hi": "Duplicates prevent karne ke liye data cleanup ke baad appropriate unique\nconstraint add karne par vichar karein."
+    },
+    "code": [
+      {
+        "language": "sql",
+        "text": "SELECT email, COUNT(*) AS occurrences\nFROM users\nWHERE email IS NOT NULL\nGROUP BY email\nHAVING COUNT(*) > 1;"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 98,
+    "category": "sql",
+    "level": "Intermediate",
+    "title": {
+      "en": "Find customers with no orders.",
+      "hi": "Aise customers find karein jinhone order nahi diya?"
+    },
+    "answer": {
+      "en": "Use NOT EXISTS with a correlated orders query. A LEFT JOIN followed by a null check on a non-nullable order key is another option. Both express absence of matching orders.",
+      "hi": "`LEFT JOIN ... WHERE o.id IS NULL` bhi common solution hai."
+    },
+    "code": [
+      {
+        "language": "sql",
+        "text": "SELECT c.id, c.name\nFROM customers c\nWHERE NOT EXISTS (\n    SELECT 1\n    FROM orders o\n    WHERE o.customer_id = c.id\n);"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 99,
+    "category": "sql",
+    "level": "Intermediate",
+    "title": {
+      "en": "Offset vs keyset pagination?",
+      "hi": "Offset vs keyset pagination?"
+    },
+    "answer": {
+      "en": "Offset skips a specified number of rows and can become expensive on deep pages. Keyset continues after a previously seen key. Use stable ordering and a unique tie-breaker for reliable cursors.",
+      "hi": "Offset: `LIMIT 20 OFFSET 10000`; deep pages par rows skip karna\nexpensive ho sakta hai. Keyset pagination last seen key se continue\nkarti hai aur large sequential lists ke liye efficient ho sakti hai.\n\nStable ordering aur cursor ke liye unique tie-breaker zaroori hai."
+    },
+    "code": [
+      {
+        "language": "sql",
+        "text": "SELECT id, created_at\nFROM orders\nWHERE id > 10000\nORDER BY id\nLIMIT 20;"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 100,
+    "category": "sql",
+    "level": "Intermediate",
+    "title": {
+      "en": "What does EXPLAIN show?",
+      "hi": "EXPLAIN kya karta hai?"
+    },
+    "answer": {
+      "en": "EXPLAIN shows the query plan, such as access methods, chosen indexes and estimated row counts. EXPLAIN ANALYZE actually runs the query on supported versions, so consider its effects before using it in production.",
+      "hi": "MySQL query ka expected execution plan dikhata hai: access method,\nindex, join order aur estimated rows. `EXPLAIN ANALYZE` supported\nversions mein query execute karke actual execution details bhi deta hai;\nproduction par use karte waqt care karein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 101,
+    "category": "sql",
+    "level": "Intermediate",
+    "title": {
+      "en": "Subqueries, CTEs and window functions?",
+      "hi": "Subquery, CTE aur window function?"
+    },
+    "answer": {
+      "en": "A subquery nests a query. A CTE names a result within a statement. A window function calculates across related rows while preserving individual rows, such as ROW_NUMBER per customer ordered by amount.",
+      "hi": "Subquery doosri query ke andar query hai. CTE (`WITH`) statement ke liye\nnamed query result banata hai. Window function related rows par\ncalculation karta hai lekin individual rows preserve karta hai."
+    },
+    "code": [
+      {
+        "language": "sql",
+        "text": "SELECT customer_id, id,\n       ROW_NUMBER() OVER (\n           PARTITION BY customer_id\n           ORDER BY amount DESC, id\n       ) AS row_num\nFROM orders;"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 102,
+    "category": "scenarios",
+    "level": "Intermediate",
+    "title": {
+      "en": "How would you integrate an insurance provider API?",
+      "hi": "Insurance provider API integrate kaise karenge?"
+    },
+    "answer": {
+      "en": "Validate and authorize at the application boundary. Use a service for the workflow and an adapter for HTTP, payload mapping, signatures and errors. Track operation IDs, status, retries and reconciliation; keep credentials in secure configuration.",
+      "hi": "Controller/Form Request validation aur authorization handle karega.\nDedicated service business workflow manage karegi. Provider adapter HTTP\ncalls, payload mapping, signing aur error mapping karega. Credentials\nconfiguration/secret manager mein rahengi. Request IDs, operation\nstatus, retries aur reconciliation rakhein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 103,
+    "category": "scenarios",
+    "level": "Intermediate",
+    "title": {
+      "en": "What is JWS signing?",
+      "hi": "JWS signing kya hai?"
+    },
+    "answer": {
+      "en": "JSON Web Signature protects integrity and allows verification of the signer. Follow the provider's specified algorithms, headers, payload and keys. A signature does not encrypt the payload or make it secret.",
+      "hi": "JWS (JSON Web Signature) message/payload ki integrity aur signer\nverification ke liye digital signature format hai. Provider\nspecification ke mutabik algorithm, payload, headers aur keys use karni\nchahiye. JWS ko encryption/JWE ke saath confuse na karein; signing ka\nmatlab payload necessarily secret nahi hota."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 104,
+    "category": "scenarios",
+    "level": "Intermediate",
+    "title": {
+      "en": "How would you build a large Excel export?",
+      "hi": "Large Excel export kaise banayenge?"
+    },
+    "answer": {
+      "en": "Dispatch a background job, process records in chunks or with a cursor, store the result and expose an authorized download. Track status and handle memory limits, failure and temporary-file cleanup.",
+      "hi": "Background queue job dispatch karein, records ko chunks/cursor mein\nprocess karein, file storage mein save karein, progress/status maintain\nkarein aur ready hone par user ko notification/download link dein.\nMemory use, authorization aur temporary-file cleanup plan karein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 105,
+    "category": "scenarios",
+    "level": "Intermediate",
+    "title": {
+      "en": "How do you prevent duplicate payments?",
+      "hi": "Duplicate payment/policy request kaise rokenge?"
+    },
+    "answer": {
+      "en": "Use idempotency keys, suitable unique constraints and transaction or locking rules for concurrency. Reconcile uncertain outcomes with the provider. A timeout does not prove the payment failed.",
+      "hi": "Idempotency key/provider reference use karein, database unique\nconstraint add karein jahan suitable ho, concurrent requests ke liye\ntransaction/locking use karein, aur uncertain API outcomes ko provider\nse reconcile karein. Sirf timeout dekhkar assume na karein ki payment\nfail hua."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 106,
+    "category": "scenarios",
+    "level": "Intermediate",
+    "title": {
+      "en": "Why does an API work locally but fail in production?",
+      "hi": "Local mein chalne wala API production mein fail ho to?"
+    },
+    "answer": {
+      "en": "Compare deployed versions, configuration, secrets, extensions, permissions, migrations, network access and workers. Use correlation IDs and sanitized logs to isolate the failing layer, then add a regression test.",
+      "hi": "Deployment/version, environment variables, secrets, PHP extensions,\npermissions, migrations, network, queue workers, cache aur provider\nresponse check karein. Correlation ID aur sanitized logs se failure\nlayer isolate karein, fix karein aur regression test add karein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 107,
+    "category": "scenarios",
+    "level": "Intermediate",
+    "title": {
+      "en": "How would you design a realtime feature?",
+      "hi": "WebSocket real-time feature kaise design karenge?"
+    },
+    "answer": {
+      "en": "Persist the authoritative state before broadcasting. Authorize private channels and handle reconnects, duplicates, ordering and missed messages. The browser's copy is not the source of truth.",
+      "hi": "State change pehle authoritative store mein persist karein; phir\nevent/broadcast publish karein. Private channel authorization, reconnect\nbehavior, duplicate/out-of-order events aur missed updates recover karne\nka plan banayein. Client ko source of truth na samjhein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 108,
+    "category": "scenarios",
+    "level": "Intermediate",
+    "title": {
+      "en": "How do you investigate slow SQL?",
+      "hi": "Slow SQL production issue kaise investigate karenge?"
+    },
+    "answer": {
+      "en": "Identify the slow query, inspect its plan, rows examined, joins, filters and sorts. Test a targeted query or index change on representative data and compare latency after deployment.",
+      "hi": "Slow query identify karein, `EXPLAIN`/actual metrics dekhein, rows\nexamined, joins, filters, sort aur index usage inspect karein.\nRepresentative data par targeted query/index change test karein aur\ndeploy ke baad latency compare karein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 109,
+    "category": "scenarios",
+    "level": "Intermediate",
+    "title": {
+      "en": "How do you handle third-party API failures?",
+      "hi": "Third-party API failures kaise handle karenge?"
+    },
+    "answer": {
+      "en": "Set timeouts, validate responses and use safe retries with backoff. Track correlation IDs, idempotency and reconciliation. Consider circuit breaking where useful. Never blindly retry a non-idempotent operation.",
+      "hi": "Timeouts, safe retries with backoff, response validation, correlation\nIDs, circuit-breaking strategy where appropriate, idempotency and\nreconciliation. Non-idempotent request ko blindly repeat na karein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 110,
+    "category": "scenarios",
+    "level": "Intermediate",
+    "title": {
+      "en": "How do you maintain senior-level code quality?",
+      "hi": "Senior developer ke taur par code quality kaise maintain karte hain?"
+    },
+    "answer": {
+      "en": "Use clear boundaries, focused classes, dependency injection, validation, reviews and automated tests. Add useful logs, safe configuration, compatible migrations and measurable monitoring. Abstract only to solve a real problem.",
+      "hi": "Clear boundaries, dependency injection, focused classes, validation,\ncode review, automated tests, useful logging, safe configuration,\nbackward-compatible migrations aur measurable monitoring. Pattern use\nkarne ke liye pattern nahi---actual problem solve karne ke liye\nabstraction use karein."
+    },
+    "code": [],
+    "source": "updated-guide"
+  },
+  {
+    "id": 111,
+    "category": "patterns",
+    "level": "Foundation",
+    "title": {
+      "en": "Print a solid square.",
+      "hi": "Solid square star pattern"
+    },
+    "answer": {
+      "en": "The outer loop creates rows. The inner loop prints n stars on each row. A newline finishes the row. For n=4, there are four rows of four stars.",
+      "hi": "`n = 4` ke liye 4 × 4 stars print karo.\n\n**Easy explanation:** Outer loop 4 rows banata hai. Har row mein inner\nloop 4 stars print karta hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$n = 4;\n\nfor ($i = 1; $i <= $n; $i++) {\n    for ($j = 1; $j <= $n; $j++) {\n        echo \"*\";\n    }\n    echo PHP_EOL;\n}"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 112,
+    "category": "patterns",
+    "level": "Foundation",
+    "title": {
+      "en": "Print a right-angled triangle.",
+      "hi": "Right-angled triangle star pattern"
+    },
+    "answer": {
+      "en": "The outer loop chooses row i. The inner loop prints i stars. Row lengths grow from 1 to n; each completed row ends with a newline.",
+      "hi": "Har next row mein ek extra star print karo.\n\n**Easy explanation:** Row 1 mein 1 star, row 2 mein 2 stars, aur isi\ntarah. Inner loop ki limit `$i` hai, isliye stars badhte jaate hain."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$n = 4;\n\nfor ($i = 1; $i <= $n; $i++) {\n    for ($j = 1; $j <= $i; $j++) {\n        echo \"*\";\n    }\n    echo PHP_EOL;\n}"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 113,
+    "category": "patterns",
+    "level": "Foundation",
+    "title": {
+      "en": "Print an inverted triangle.",
+      "hi": "Inverted right-angled triangle"
+    },
+    "answer": {
+      "en": "Start the outer counter at n and decrement to 1. Print i stars on each row. The triangle gets one star shorter each time.",
+      "hi": "Pehli row mein 4 stars aur har next row mein ek star kam.\n\n**Easy explanation:** Outer loop 4 se 1 tak reverse chalta hai. Isliye\nhar row mein stars kam hote hain."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$n = 4;\n\nfor ($i = $n; $i >= 1; $i--) {\n    for ($j = 1; $j <= $i; $j++) {\n        echo \"*\";\n    }\n    echo PHP_EOL;\n}"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 114,
+    "category": "patterns",
+    "level": "Foundation",
+    "title": {
+      "en": "Print a number triangle.",
+      "hi": "Number triangle"
+    },
+    "answer": {
+      "en": "For row i, print the inner counter j from 1 through i. Reset j at the start of every row. The result begins with 1, then 12, then 123.",
+      "hi": "Row number ke barabar numbers print karo.\n\n**Easy explanation:** Inner loop ka `$j` 1 se current row number tak\nchalta hai. Har row mein numbers dobara 1 se start hote hain."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$n = 4;\n\nfor ($i = 1; $i <= $n; $i++) {\n    for ($j = 1; $j <= $i; $j++) {\n        echo $j;\n    }\n    echo PHP_EOL;\n}"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 115,
+    "category": "patterns",
+    "level": "Foundation",
+    "title": {
+      "en": "Print repeated row numbers.",
+      "hi": "Repeated row-number triangle"
+    },
+    "answer": {
+      "en": "Print i rather than j in the inner loop. Row 1 contains 1, row 2 contains 22, and row 3 contains 333. The outer counter determines the repeated digit.",
+      "hi": "Har row mein us row ka number repeat karo.\n\n**Easy explanation:** Is baar print `$j` nahi, `$i` kar rahe hain. `$i`\ncurrent row number hai, isliye same number repeat hota hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$n = 4;\n\nfor ($i = 1; $i <= $n; $i++) {\n    for ($j = 1; $j <= $i; $j++) {\n        echo $i;\n    }\n    echo PHP_EOL;\n}"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 116,
+    "category": "patterns",
+    "level": "Foundation",
+    "title": {
+      "en": "Print Floyd's triangle.",
+      "hi": "Floyd's triangle"
+    },
+    "answer": {
+      "en": "Keep a number counter outside both loops. Print it and increment after each value. Because it is not reset between rows, the sequence continues as 1, then 2 3, then 4 5 6.",
+      "hi": "Continuous counting numbers ko triangle shape mein print\nkaro.\n\n**Easy explanation:** `$num` loop ke bahar rakha hai, isliye har row ke\nbaad reset nahi hota. Har print ke baad `$num++` next number par le\njaata hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$n = 4;\n$num = 1;\n\nfor ($i = 1; $i <= $n; $i++) {\n    for ($j = 1; $j <= $i; $j++) {\n        echo $num . \" \";\n        $num++;\n    }\n    echo PHP_EOL;\n}"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 117,
+    "category": "patterns",
+    "level": "Foundation",
+    "title": {
+      "en": "Print a pyramid.",
+      "hi": "Pyramid star pattern"
+    },
+    "answer": {
+      "en": "For row i, print n-i spaces followed by 2*i-1 stars. Spaces decrease while star counts increase through odd numbers. Preserve leading spaces when displaying the output.",
+      "hi": "Stars ko center mein pyramid shape mein print karo.\n\n**Easy explanation:** Har row mein pehle spaces print hote hain, phir\nstars. Spaces kam hote hain aur stars 1, 3, 5, 7 ki tarah badhte hain.\n`2 * $i - 1` odd numbers deta hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$n = 4;\n\nfor ($i = 1; $i <= $n; $i++) {\n    for ($space = 1; $space <= $n - $i; $space++) {\n        echo \" \";\n    }\n\n    for ($star = 1; $star <= (2 * $i - 1); $star++) {\n        echo \"*\";\n    }\n\n    echo PHP_EOL;\n}"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 118,
+    "category": "patterns",
+    "level": "Foundation",
+    "title": {
+      "en": "Print an inverted pyramid.",
+      "hi": "Inverted pyramid"
+    },
+    "answer": {
+      "en": "Use the pyramid rule but iterate i from n down to 1. Star counts shrink and leading spaces grow. The widest row appears first.",
+      "hi": "Sabse wide row se start karke ulta pyramid print karo.\n\n**Easy explanation:** Pyramid wale logic jaisa hi hai, bas outer loop\n`$n` se 1 tak reverse chalta hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$n = 4;\n\nfor ($i = $n; $i >= 1; $i--) {\n    for ($space = 1; $space <= $n - $i; $space++) {\n        echo \" \";\n    }\n\n    for ($star = 1; $star <= (2 * $i - 1); $star++) {\n        echo \"*\";\n    }\n\n    echo PHP_EOL;\n}"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 119,
+    "category": "patterns",
+    "level": "Foundation",
+    "title": {
+      "en": "Print a diamond.",
+      "hi": "Diamond star pattern"
+    },
+    "answer": {
+      "en": "Print the upper pyramid, then its inverted lower half. Start the lower half at n-1 so the widest row is not duplicated.",
+      "hi": "Pyramid aur inverted pyramid ko mila kar diamond banao.\n\n**Easy explanation:** Pehla loop upper pyramid banata hai. Doosra loop\n`n - 1` se start hota hai, taaki widest row do baar print na ho."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$n = 4;\n\n// Upper half\nfor ($i = 1; $i <= $n; $i++) {\n    for ($space = 1; $space <= $n - $i; $space++) {\n        echo \" \";\n    }\n    for ($star = 1; $star <= (2 * $i - 1); $star++) {\n        echo \"*\";\n    }\n    echo PHP_EOL;\n}\n\n// Lower half (top widest row repeat nahi karni)\nfor ($i = $n - 1; $i >= 1; $i--) {\n    for ($space = 1; $space <= $n - $i; $space++) {\n        echo \" \";\n    }\n    for ($star = 1; $star <= (2 * $i - 1); $star++) {\n        echo \"*\";\n    }\n    echo PHP_EOL;\n}"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 120,
+    "category": "patterns",
+    "level": "Foundation",
+    "title": {
+      "en": "Print a hollow square.",
+      "hi": "Hollow square pattern"
+    },
+    "answer": {
+      "en": "Print a star when the row or column is at the first or last boundary. Print a space everywhere else. Both loops still traverse the whole square.",
+      "hi": "Square ki sirf boundary par stars print karo.\n\n**Easy explanation:** First row, last row, first column aur last column\nboundary hain. In positions par star; baaki jagah space."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$n = 4;\n\nfor ($i = 1; $i <= $n; $i++) {\n    for ($j = 1; $j <= $n; $j++) {\n        if ($i == 1 || $i == $n || $j == 1 || $j == $n) {\n            echo \"*\";\n        } else {\n            echo \" \";\n        }\n    }\n    echo PHP_EOL;\n}"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 121,
+    "category": "patterns",
+    "level": "Foundation",
+    "title": {
+      "en": "Print an alphabet triangle.",
+      "hi": "Alphabet triangle"
+    },
+    "answer": {
+      "en": "Use chr(65 + j) to generate A, B, C and so on. Each row prints one additional letter. This simple ASCII example is intended for the A-Z range.",
+      "hi": "Har row mein A se current letter tak print karo.\n\n**Easy explanation:** `chr(65)` ka result `A` hota hai, `chr(66)` ka\n`B`. Isliye `65 + $j` se letters milte hain. Yeh example A--Z range ke\nandar ke liye hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$n = 4;\n\nfor ($i = 1; $i <= $n; $i++) {\n    for ($j = 0; $j < $i; $j++) {\n        echo chr(65 + $j);\n    }\n    echo PHP_EOL;\n}"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 122,
+    "category": "patterns",
+    "level": "Foundation",
+    "title": {
+      "en": "Print a shrinking number triangle.",
+      "hi": "Reverse number triangle"
+    },
+    "answer": {
+      "en": "Count the outer row length down from n to 1, while the inner loop still prints numbers in ascending order. The result is 1234, then 123, then 12, then 1.",
+      "hi": "Har row mein numbers ko reverse order mein print karo.\n\n**Easy explanation:** Outer loop row length ko 4 se 1 tak kam karta hai.\nInner loop har row mein 1 se current limit tak print karta hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$n = 4;\n\nfor ($i = $n; $i >= 1; $i--) {\n    for ($j = 1; $j <= $i; $j++) {\n        echo $j;\n    }\n    echo PHP_EOL;\n}"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 123,
+    "category": "patterns",
+    "level": "Foundation",
+    "title": {
+      "en": "Print alternating ones and zeros.",
+      "hi": "Alternating 1 and 0 pattern"
+    },
+    "answer": {
+      "en": "Check whether i+j is even. Print 1 for even and 0 for odd. The parity changes in both directions, creating the alternating pattern.",
+      "hi": "Row aur column ke combination se 1/0 ka pattern banao.\n\n**Easy explanation:** `$i + $j` even ho to 1, odd ho to 0 print hota\nhai. `% 2` remainder check karta hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$n = 4;\n\nfor ($i = 1; $i <= $n; $i++) {\n    for ($j = 1; $j <= $i; $j++) {\n        echo (($i + $j) % 2 === 0) ? \"1\" : \"0\";\n    }\n    echo PHP_EOL;\n}"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 124,
+    "category": "patterns",
+    "level": "Foundation",
+    "title": {
+      "en": "Print Pascal's triangle.",
+      "hi": "Pascal's triangle (basic version)"
+    },
+    "answer": {
+      "en": "Each row starts with 1. Compute the next value with value*(i-j)/(j+1), using integer division for this recurrence. Pad the row with spaces. Large rows can overflow fixed-size integers.",
+      "hi": "Pascal's triangle print karo, jahan har number pichhli row\nke do numbers ka sum hota hai.\n\n**Easy explanation:** Har row ka pehla number 1 hota hai. Formula se\nnext number calculate hota hai. `intdiv()` integer division karta hai.\nBade `n` ke liye integer overflow ka dhyan rakhein."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "$n = 5;\n\nfor ($i = 0; $i < $n; $i++) {\n    for ($space = 0; $space < $n - $i - 1; $space++) {\n        echo \" \";\n    }\n\n    $value = 1;\n    for ($j = 0; $j <= $i; $j++) {\n        echo $value . \" \";\n        $value = intdiv($value * ($i - $j), $j + 1);\n    }\n    echo PHP_EOL;\n}"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 125,
+    "category": "patterns",
+    "level": "Foundation",
+    "title": {
+      "en": "Turn the triangle into a function.",
+      "hi": "Pattern ko function mein convert karo"
+    },
+    "answer": {
+      "en": "Accept a positive integer size and reject values below 1. Print str_repeat('*', i) for each row. A function makes the pattern reusable and gives input validation a clear home.",
+      "hi": "Reusable function banao jo kisi bhi positive size ka right\ntriangle print kare.\n\n**Easy explanation:** Pattern logic ko function mein rakhne se code\nreuse ho sakta hai. Input validate karna bhi achhi habit hai."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "function printTriangle(int $n): void\n{\n    if ($n < 1) {\n        throw new InvalidArgumentException(\"Size must be at least 1\");\n    }\n\n    for ($i = 1; $i <= $n; $i++) {\n        echo str_repeat(\"*\", $i) . PHP_EOL;\n    }\n}\n\nprintTriangle(5);"
+      }
+    ],
+    "source": "updated-guide"
+  },
+  {
+    "id": 126,
+    "category": "laravel",
+    "title": {
+      "en": "How does Laravel implement MVC?",
+      "hi": "Laravel mein MVC kaise kaam karta hai?"
+    },
+    "answer": {
+      "en": "Model represents data and its behavior. View presents the response, often using Blade. Controller receives a routed request and coordinates the work. Keep substantial business logic in focused services instead of putting everything in a controller.",
+      "hi": "Model data aur uska behavior handle karta hai. View output dikhata hai, aksar Blade se. Controller routed request lekar kaam coordinate karta hai. Badi business logic ko focused services mein rakho, controller mein sab kuch mat bharo."
+    },
+    "code": [],
+    "level": "Intermediate",
+    "source": "original-questions"
+  },
+  {
+    "id": 127,
+    "category": "laravel",
+    "title": {
+      "en": "What is Blade templating?",
+      "hi": "Blade templating kya hai?"
+    },
+    "answer": {
+      "en": "Blade is Laravel's template engine. It offers layouts, components and directives such as @if and @foreach. {{ $value }} escapes output for HTML; raw output syntax must not be used with untrusted content. Templates compile to PHP and can be cached.",
+      "hi": "Blade Laravel ka template engine hai. Layouts, components, @if aur @foreach jaise directives milte hain. {{ $value }} HTML output escape karta hai. Untrusted content ke liye raw output use mat karo. Templates PHP mein compile hote hain."
+    },
+    "code": [],
+    "level": "Intermediate",
+    "source": "original-questions"
+  },
+  {
+    "id": 128,
+    "category": "laravel",
+    "title": {
+      "en": "Why use database migrations?",
+      "hi": "Database migrations kyun use karein?"
+    },
+    "answer": {
+      "en": "Migrations version database schema changes in code so environments can evolve consistently. Generate one with php artisan make:migration, define the schema change, and apply it with php artisan migrate. Plan backward compatibility and backups; a rollback can lose data.",
+      "hi": "Migrations database schema ke changes ko code mein version karti hain. php artisan make:migration se file banao aur php artisan migrate se apply karo. Deployment mein backward compatibility aur backup plan karo; rollback se data lose ho sakta hai."
+    },
+    "code": [],
+    "level": "Intermediate",
+    "source": "original-questions"
+  },
+  {
+    "id": 129,
+    "category": "laravel",
+    "title": {
+      "en": "Seeders vs factories?",
+      "hi": "Seeders aur factories mein difference?"
+    },
+    "answer": {
+      "en": "A factory defines how to create example model data. A seeder coordinates inserting initial or demonstration records. Use factories in tests for reproducible scenarios and seeders for intentional database setup. Avoid accidentally seeding demo users in production.",
+      "hi": "Factory example model data banane ka pattern define karti hai. Seeder initial ya demo records insert karne ka kaam coordinate karta hai. Tests mein factories aur intentional setup mein seeders use karo. Production mein galti se demo users seed mat karo."
+    },
+    "code": [],
+    "level": "Intermediate",
+    "source": "original-questions"
+  },
+  {
+    "id": 130,
+    "category": "laravel",
+    "title": {
+      "en": "What are named routes?",
+      "hi": "Named routes kya hain?"
+    },
+    "answer": {
+      "en": "A named route gives a stable name to a URL mapping. Generate links with route('orders.show', $order) rather than hardcoding the path. Route groups can share middleware, prefixes and name prefixes. Names improve maintainability but do not replace authorization.",
+      "hi": "Named route URL mapping ko ek stable naam deta hai. Hardcoded path ke bajay route('orders.show', $order) se link banao. Route groups middleware aur prefixes share kar sakte hain. Route ka naam authorization ka replacement nahi hai."
+    },
+    "code": [],
+    "level": "Intermediate",
+    "source": "original-questions"
+  },
+  {
+    "id": 131,
+    "category": "laravel",
+    "title": {
+      "en": "What is a Laravel facade?",
+      "hi": "Laravel facade kya hota hai?"
+    },
+    "answer": {
+      "en": "A facade provides a static-looking interface to a service resolved from Laravel's container. For example, Cache::get delegates to the cache service. Facades can be mocked in Laravel tests; ordinary static methods do not automatically have that behavior. Explicit injection can make dependencies clearer.",
+      "hi": "Facade container se resolved service ko static-jaisa interface deta hai. Cache::get cache service ko call karta hai. Laravel tests mein facade mock ho sakta hai; normal static method automatically aisa nahi hota. Explicit injection dependencies ko clear banata hai."
+    },
+    "code": [],
+    "level": "Intermediate",
+    "source": "original-questions"
+  },
+  {
+    "id": 132,
+    "category": "laravel",
+    "title": {
+      "en": "What are Laravel collections?",
+      "hi": "Laravel collections kya hain?"
+    },
+    "answer": {
+      "en": "A collection wraps data with methods such as map, filter, groupBy and reduce. It makes transformations readable. Do not load millions of rows into memory just to filter them; filter in the database or consider lazy iteration for large datasets.",
+      "hi": "Collection data ko map, filter, groupBy aur reduce jaise methods deta hai. Transformations readable banti hain. Sirf filter karne ke liye lakhon rows memory mein mat lao; database mein filter karo ya lazy iteration use karo."
+    },
+    "code": [],
+    "level": "Intermediate",
+    "source": "original-questions"
+  },
+  {
+    "id": 133,
+    "category": "laravel",
+    "title": {
+      "en": "What are accessors and mutators?",
+      "hi": "Accessors aur mutators kya hain?"
+    },
+    "answer": {
+      "en": "An accessor transforms an attribute when it is read. A mutator transforms it when it is assigned. Casts express common type conversions, such as dates or JSON. Keep transformations predictable and avoid surprising database calls when merely reading a property.",
+      "hi": "Accessor attribute read karte waqt transform karta hai. Mutator assign karte waqt transform karta hai. Casts dates ya JSON jaise common type conversions handle karte hain. Property read karne par unexpected database calls mat chalao."
+    },
+    "code": [],
+    "level": "Intermediate",
+    "source": "original-questions"
+  },
+  {
+    "id": 134,
+    "category": "laravel",
+    "title": {
+      "en": "What is CSRF protection?",
+      "hi": "CSRF protection kya hai?"
+    },
+    "answer": {
+      "en": "CSRF tricks a signed-in browser into sending an unwanted request with its cookies. Laravel's web middleware checks CSRF tokens for state-changing requests. Use @csrf in Blade forms. Token checks complement SameSite cookies and authorization; they do not prevent XSS.",
+      "hi": "CSRF mein signed-in browser ko uski cookies ke saath unwanted request bhejne ke liye trick kiya jaata hai. Laravel web middleware state-changing requests ka CSRF token check karta hai. Blade forms mein @csrf use karo. Yeh XSS ya authorization ka replacement nahi hai."
+    },
+    "code": [],
+    "level": "Intermediate",
+    "source": "original-questions"
+  },
+  {
+    "id": 135,
+    "category": "oop",
+    "title": {
+      "en": "What is method overriding in PHP?",
+      "hi": "PHP mein method overriding kya hai?"
+    },
+    "answer": {
+      "en": "A child class supplies its own implementation of an inherited method. The signature must remain compatible with the parent contract; visibility cannot become more restrictive. Modern PHP permits certain parameter and return-type variance, so identical types are not a universal rule. A final method cannot be overridden.",
+      "hi": "Child class inherited method ka apna implementation deti hai. Signature parent contract ke compatible hona chahiye; visibility zyada restrictive nahi ho sakti. Modern PHP kuch parameter aur return-type variance allow karta hai, isliye bilkul same types universal rule nahi. Final method override nahi hota."
+    },
+    "code": [
+      {
+        "language": "php",
+        "text": "class Animal {\n    public function speak(): string { return 'Sound'; }\n}\nclass Dog extends Animal {\n    public function speak(): string { return 'Bark'; }\n}\necho (new Dog())->speak();"
+      }
+    ],
+    "level": "Intermediate",
+    "source": "original-questions"
+  },
+  {
+    "id": 136,
+    "category": "php",
+    "title": {
+      "en": "PDO vs mysqli?",
+      "hi": "PDO aur mysqli mein difference?"
+    },
+    "answer": {
+      "en": "mysqli targets MySQL and offers procedural and object-oriented APIs. PDO offers a common object-oriented interface with different database drivers. Both support prepared statements. Bind data values instead of interpolating input; PDO alone does not make a query safe or make SQL portable.",
+      "hi": "mysqli MySQL ke liye hai, procedural aur object-oriented APIs deta hai. PDO multiple database drivers ke saath common interface deta hai. Dono prepared statements support karte hain. Input directly SQL mein jodne ke bajay values bind karo; sirf PDO use karna safety guarantee nahi hai."
+    },
+    "code": [],
+    "level": "Intermediate",
+    "source": "original-questions"
+  },
+  {
+    "id": 137,
+    "category": "php",
+    "title": {
+      "en": "How does Composer autoloading work?",
+      "hi": "Composer autoloading kaise kaam karti hai?"
+    },
+    "answer": {
+      "en": "Composer generates an autoloader from the project's configuration. Requiring vendor/autoload.php lets PHP locate classes when they are first used. PSR-4 maps namespace prefixes to directories. Keep namespace, class name and filename casing consistent, especially on case-sensitive filesystems.",
+      "hi": "Composer project configuration se autoloader generate karta hai. vendor/autoload.php load karne ke baad PHP classes ko zaroorat par locate karta hai. PSR-4 namespace prefixes ko directories se map karta hai. Namespace, class aur filename ki casing consistent rakho."
+    },
+    "code": [],
+    "level": "Intermediate",
+    "source": "original-questions"
+  }
+]
