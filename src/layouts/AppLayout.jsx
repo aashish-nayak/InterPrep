@@ -155,7 +155,7 @@ export default function AppLayout() {
           </div>
 
           {/* Sidebar Bottom Quote & Storage Status */}
-          <div className="mt-auto pt-6 space-y-4">
+          {/* <div className="mt-auto pt-6 space-y-4">
             <div className="rounded-2xl border border-hairline bg-surface-2 p-3.5 space-y-1.5 text-xs">
               <div className="flex items-center gap-1.5 font-semibold text-ink">
                 <GraduationCap className="h-4 w-4 text-pink" />
@@ -170,7 +170,7 @@ export default function AppLayout() {
               <span className="h-1.5 w-1.5 rounded-full bg-teal" />
               <span>Progress saved locally</span>
             </div>
-          </div>
+          </div> */}
         </aside>
 
         {/* Main Shell */}
@@ -271,7 +271,7 @@ export default function AppLayout() {
               <span>•</span>
               <span className="text-pink font-semibold">137 Core Concepts</span>
             </span>
-            <span>PHP & Laravel · Code With Animation Design System</span>
+            <span>© 2026 InterPrep. Built with ❤️ by <a href="mailto:ashunayakme@gmail.com">Aashish Nayak</a></span>
           </footer>
         </div>
 
