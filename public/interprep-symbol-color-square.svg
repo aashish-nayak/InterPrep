@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256"><title>InterPrep</title><g transform="translate(-40.19 -44.03) scale(1.344)">
+  <title id="title-symbol">InterPrep Symbol Color</title>
+  <g id="symbol">
+    <!-- Seamless unified IP monogram with 45-degree dialogue tail -->
+    <path fill-rule="evenodd" fill="#1b1a17" d="M 58 48 L 154 48 A 48 48 0 0 1 202 96 A 48 48 0 0 1 176 144 L 194 162 L 154 144 L 88 144 L 88 198 A 10 10 0 0 1 78 208 L 58 208 A 10 10 0 0 1 48 198 L 48 58 A 10 10 0 0 1 58 48 Z M 88 80 L 148 80 A 16 16 0 0 1 148 112 L 88 112 Z" />
+    <!-- Accent Period Dot -->
+    <circle cx="186" cy="192" r="16" fill="#ff477e" />
+  </g>
+</g></svg>

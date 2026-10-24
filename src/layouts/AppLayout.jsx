@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import VoiceSettingsModal from '../VoiceSettingsModal.jsx';
 import { useApp, AppContext } from '../context/AppContext';
+import { BrandLogo } from '../components/BrandLogo.jsx';
 
 export { useApp, AppContext };
 
@@ -86,13 +87,11 @@ export default function AppLayout() {
               to="/learn"
               className="flex items-center gap-2.5 text-lg font-bold tracking-tight text-ink group"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full border border-hairline bg-surface text-ink shadow-2xs group-hover:border-pink/40 transition-colors">
-                <span className="font-display font-bold text-xs tracking-tighter">
-                  IP<span className="text-pink">.</span>
-                </span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-hairline bg-surface text-ink shadow-2xs group-hover:border-pink/40 group-hover:shadow-xs transition-all">
+                <BrandLogo size={22} symbolColor="#1b1a17" accentColor="#ff477e" />
               </div>
               <span className="font-display text-lg font-semibold tracking-tight text-ink">
-                Inter<span className="text-pink">Prep</span>
+                Inter<span className="text-pink font-bold">Prep</span>
               </span>
             </NavLink>
 
@@ -187,7 +186,8 @@ export default function AppLayout() {
                 <Menu className="h-5 w-5" />
               </button>
 
-              <div className="flex items-center gap-1.5 sm:gap-2 font-sans text-xs sm:text-[13px] text-ink-mute truncate">
+              <div className="flex items-center gap-2 font-sans text-xs sm:text-[13px] text-ink-mute truncate">
+                <BrandLogo size={18} symbolColor="#1b1a17" accentColor="#ff477e" className="shrink-0" />
                 <span className="font-semibold text-ink">InterPrep</span>
                 <span className="hidden sm:inline text-hairline-2">/</span>
                 <strong className="hidden sm:inline text-ink font-medium truncate">PHP & Laravel Interview</strong>

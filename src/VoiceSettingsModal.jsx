@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { KeyRound, Sparkles, Volume2, Check, Loader2, Eye, EyeOff, ExternalLink, Trash2, X } from 'lucide-react';
-import { testGoogleTtsKey, GEMINI_VOICES } from './tts.js';
+import { testGoogleTtsKey, GEMINI_VOICES, GEMINI_TTS_MODELS, normalizeTtsModel, getAudioCacheStats, clearAudioCache } from './tts.js';
 import { Dialog, DialogHeader, DialogTitle, DialogDescription } from './components/ui/dialog';
 import { Button } from './components/ui/button';
 import { Input } from './components/ui/input';
@@ -10,19 +10,21 @@ import { PulseBadge } from './components/lightwind/pulse-badge';
 export default function VoiceSettingsModal({ isOpen, onClose, data, onSave, currentLang = 'en' }) {
   const [apiKey, setApiKey] = useState(data.googleTtsApiKey || '');
   const [voiceName, setVoiceName] = useState(data.ttsVoiceName || 'Kore');
-  const [model, setModel] = useState(data.ttsModel || 'gemini-3.8-flash');
+  const [model, setModel] = useState(normalizeTtsModel(data.ttsModel));
   const [showKey, setShowKey] = useState(false);
   const [testState, setTestState] = useState('idle'); // 'idle' | 'testing' | 'success' | 'error'
   const [testMsg, setTestMsg] = useState('');
+  const [cachedCount, setCachedCount] = useState(0);
   const testAudioRef = useRef(null);
 
   useEffect(() => {
     if (isOpen) {
       setApiKey(data.googleTtsApiKey || '');
       setVoiceName(data.ttsVoiceName || 'Kore');
-      setModel(data.ttsModel || 'gemini-3.8-flash');
+      setModel(normalizeTtsModel(data.ttsModel));
       setTestState('idle');
       setTestMsg('');
+      getAudioCacheStats().then(s => setCachedCount(s.count || 0)).catch(() => {});
     } else {
       if (testAudioRef.current) {
         testAudioRef.current.pause();
@@ -69,7 +71,7 @@ export default function VoiceSettingsModal({ isOpen, onClose, data, onSave, curr
     onSave({
       googleTtsApiKey: apiKey.trim(),
       ttsVoiceName: voiceName,
-      ttsModel: model
+      ttsModel: normalizeTtsModel(model)
     });
     onClose();
   }
@@ -81,7 +83,7 @@ export default function VoiceSettingsModal({ isOpen, onClose, data, onSave, curr
     onSave({
       googleTtsApiKey: '',
       ttsVoiceName: voiceName,
-      ttsModel: model
+      ttsModel: normalizeTtsModel(model)
     });
   }
 
@@ -191,9 +193,9 @@ export default function VoiceSettingsModal({ isOpen, onClose, data, onSave, curr
                 onChange={(e) => setModel(e.target.value)}
                 className="w-full rounded-md border border-input bg-card px-3 py-1.5 text-xs text-foreground shadow-xs focus:outline-none focus:ring-2 focus:ring-ring"
               >
-                <option value="gemini-3.8-flash">Gemini 3.8 Flash (Latest · Recommended)</option>
-                <option value="gemini-2.0-flash">Gemini 2.0 Flash (Fast & Expressive)</option>
-                <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+                {GEMINI_TTS_MODELS.map(m => (
+                  <option key={m.id} value={m.id}>{m.name}</option>
+                ))}
               </select>
             </div>
           </div>
@@ -220,6 +222,29 @@ export default function VoiceSettingsModal({ isOpen, onClose, data, onSave, curr
                 {testMsg}
               </span>
             )}
+          </div>
+
+          {/* Offline Cache section */}
+          <div className="flex items-center justify-between rounded-lg border border-border/80 bg-muted/20 px-3 py-2 text-xs">
+            <span className="text-muted-foreground">
+              Offline Audio Cache:{' '}
+              <strong className="text-foreground">
+                {cachedCount > 0 ? `${cachedCount} audio ${cachedCount === 1 ? 'answer' : 'answers'} stored` : '0 answers (empty)'}
+              </strong>
+            </span>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={cachedCount === 0}
+              onClick={async () => {
+                await clearAudioCache();
+                setCachedCount(0);
+              }}
+              className="h-6 px-2 text-[11px] text-muted-foreground hover:text-destructive cursor-pointer disabled:opacity-50"
+            >
+              Clear Cache
+            </Button>
           </div>
 
           {/* Guide card */}

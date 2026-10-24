@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import CodeBlock from '../components/CodeBlock';
+import { BrandLogo } from '../components/BrandLogo.jsx';
 import { TipCallout, RememberThisCard } from '../components/Callout';
 
 const supportedRoles = [
@@ -121,13 +122,11 @@ export default function HomePage() {
           {/* Brand */}
           <div className="flex items-center gap-6">
             <Link to="/" className="flex items-center gap-2.5 text-lg font-bold tracking-tight text-ink group">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full border border-hairline bg-surface text-ink shadow-2xs group-hover:border-pink/40 transition-colors">
-                <span className="font-display font-bold text-xs tracking-tighter">
-                  IP<span className="text-pink">.</span>
-                </span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-hairline bg-surface text-ink shadow-2xs group-hover:border-pink/40 group-hover:shadow-xs transition-all">
+                <BrandLogo size={22} symbolColor="#1b1a17" accentColor="#ff477e" />
               </div>
               <span className="font-display text-lg font-semibold tracking-tight text-ink">
-                Inter<span className="text-pink">Prep</span>
+                Inter<span className="text-pink font-bold">Prep</span>
               </span>
             </Link>
 
@@ -525,9 +524,10 @@ class OrderService
       {/* ── Footer ── */}
       <footer className="border-t border-hairline py-10 bg-bg text-ink-mute font-sans text-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
+            <BrandLogo size={20} symbolColor="#1b1a17" accentColor="#ff477e" />
             <span className="font-display font-bold text-sm text-ink">
-              Inter<span className="text-pink">Prep</span>
+              Inter<span className="text-pink font-bold">Prep</span>
             </span>
             <span>•</span>
             <span>PHP & Laravel Technical Interview System</span>

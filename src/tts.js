@@ -91,13 +91,146 @@ function pcmToWavBlob(pcmBytes, sampleRate = 24000, numChannels = 1, bitsPerSamp
   return new Blob([wavBytes], { type: 'audio/wav' });
 }
 
+const DB_NAME = 'interprep_audio_v2';
+const STORE_NAME = 'audio_cache';
+
+let dbPromise = null;
+
+function getAudioDB() {
+  if (typeof indexedDB === 'undefined') return Promise.resolve(null);
+  if (!dbPromise) {
+    dbPromise = new Promise((resolve) => {
+      try {
+        const req = indexedDB.open(DB_NAME, 1);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            db.createObjectStore(STORE_NAME);
+          }
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => resolve(null);
+      } catch {
+        resolve(null);
+      }
+    });
+  }
+  return dbPromise;
+}
+
+export async function getCachedAudioBlob(cacheKey) {
+  try {
+    const db = await getAudioDB();
+    if (!db) return null;
+    return new Promise((resolve) => {
+      try {
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.get(cacheKey);
+        req.onsuccess = () => resolve(req.result || null);
+        req.onerror = () => resolve(null);
+      } catch {
+        resolve(null);
+      }
+    });
+  } catch {
+    return null;
+  }
+}
+
+export async function storeAudioBlob(cacheKey, blob) {
+  try {
+    const db = await getAudioDB();
+    if (!db) return false;
+    return new Promise((resolve) => {
+      try {
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        store.put(blob, cacheKey);
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => resolve(false);
+      } catch {
+        resolve(false);
+      }
+    });
+  } catch {
+    return false;
+  }
+}
+
+export async function getAudioCacheStats() {
+  try {
+    const db = await getAudioDB();
+    if (!db) return { count: 0 };
+    return new Promise((resolve) => {
+      try {
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.count();
+        req.onsuccess = () => resolve({ count: req.result || 0 });
+        req.onerror = () => resolve({ count: 0 });
+      } catch {
+        resolve({ count: 0 });
+      }
+    });
+  } catch {
+    return { count: 0 };
+  }
+}
+
+export async function clearAudioCache() {
+  for (const url of audioCache.values()) {
+    try {
+      URL.revokeObjectURL(url);
+    } catch {
+      // ignore
+    }
+  }
+  audioCache.clear();
+
+  try {
+    const db = await getAudioDB();
+    if (!db) return true;
+    return new Promise((resolve) => {
+      try {
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        store.clear();
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => resolve(false);
+      } catch {
+        resolve(false);
+      }
+    });
+  } catch {
+    return false;
+  }
+}
+
+export const GEMINI_TTS_MODELS = [
+  { id: 'gemini-3.8-flash-tts', name: 'Gemini 3.8 Flash TTS (High Fidelity · Recommended)', tier: 'flagship' },
+  { id: 'gemini-3.8-flash-lite-tts', name: 'Gemini 3.8 Flash-Lite TTS (Fast & High Availability)', tier: 'lite' },
+  { id: 'gemini-2.0-flash', name: 'Gemini 2.0 Flash (Stable Fallback)', tier: 'legacy' }
+];
+
+export function normalizeTtsModel(rawModel) {
+  if (!rawModel || rawModel === 'gemini-3.8-flash') {
+    return 'gemini-3.8-flash-tts';
+  }
+  return rawModel;
+}
+
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export async function synthesizeGoogleSpeech({
   text,
   lang = 'en',
   apiKey,
   voiceName,
   gender = 'FEMALE',
-  model = 'gemini-3.8-flash',
+  model = 'gemini-3.8-flash-tts',
   rate = 1.0
 }) {
   const key = (apiKey || '').trim();
@@ -116,22 +249,29 @@ export async function synthesizeGoogleSpeech({
 
   const voice = getVoiceConfig({ lang, voiceName, gender });
   const speakingRate = Math.min(Math.max(Number(rate) || 1.0, 0.5), 2.0);
+  const normalizedRequestedModel = normalizeTtsModel(model);
 
   // Cache key includes model, voice name, rate, and cleaned text
-  const cacheKey = `${model}:${voice.voiceName}:${speakingRate}:${cleaned}`;
+  const cacheKey = `${normalizedRequestedModel}:${voice.voiceName}:${speakingRate}:${cleaned}`;
+
+  // 1. Check fast in-memory cache
   if (audioCache.has(cacheKey)) {
-    return { audioUrl: audioCache.get(cacheKey), cached: true };
+    return { audioUrl: audioCache.get(cacheKey), cached: true, source: 'memory' };
   }
 
-  const promptText = lang === 'hi'
-    ? `कृपया नीचे दिए गए टेक्स्ट को स्पष्ट, स्वाभाविक और स्वाभाविक गति में बोलें। कोई अतिरिक्त अभिवादन, भूमिका या टिप्पणी न जोड़ें, केवल दिया गया टेक्स्ट ही बोलें:\n\n${cleaned}`
-    : `Please read aloud the following text exactly as written with natural human intonation. Do not add any greeting, preface, or conversational comments, speak only this exact text:\n\n${cleaned}`;
+  // 2. Check persistent user-side IndexedDB cache
+  const storedBlob = await getCachedAudioBlob(cacheKey);
+  if (storedBlob) {
+    const cachedUrl = URL.createObjectURL(storedBlob);
+    audioCache.set(cacheKey, cachedUrl);
+    return { audioUrl: cachedUrl, cached: true, source: 'indexeddb' };
+  }
 
   const payload = {
     contents: [
       {
         role: 'user',
-        parts: [{ text: promptText }]
+        parts: [{ text: cleaned }]
       }
     ],
     generationConfig: {
@@ -155,36 +295,107 @@ export async function synthesizeGoogleSpeech({
     });
   }
 
-  let response = await requestModel(model);
+  // Build prioritized candidate models list with high-availability fallbacks
+  const candidateModels = Array.from(new Set([
+    normalizedRequestedModel,
+    'gemini-3.8-flash-lite-tts',
+    'gemini-3.8-flash-tts',
+    'gemini-2.0-flash'
+  ]));
 
-  // If specified model is not found, fallback to gemini-2.0-flash
-  if (response.status === 404 && model !== 'gemini-2.0-flash') {
-    response = await requestModel('gemini-2.0-flash');
-  }
+  let lastStatus = null;
+  let lastErrorMessage = '';
+  let successfulModel = null;
+  let successfulResponseData = null;
 
-  if (!response.ok) {
-    let message = `Google AI Studio request failed with status ${response.status}`;
-    try {
-      const errorJson = await response.json();
-      if (errorJson?.error?.message) {
-        message = errorJson.error.message;
+  for (let i = 0; i < candidateModels.length; i++) {
+    const candidate = candidateModels[i];
+    let response = null;
+
+    // Up to 2 attempts per candidate if encountering 503 high demand spike
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        response = await requestModel(candidate);
+      } catch (networkErr) {
+        lastErrorMessage = networkErr?.message || 'Network error reaching Google AI Studio';
+        break;
       }
-    } catch {
-      // fallback
+
+      if (response && response.ok) {
+        break;
+      }
+
+      lastStatus = response?.status;
+
+      // Handle auth / permission issues early
+      if (response && (response.status === 400 || response.status === 401 || response.status === 403)) {
+        let errBody = null;
+        try {
+          errBody = await response.json();
+        } catch {
+          // ignore json parse error
+        }
+        const msg = errBody?.error?.message || '';
+
+        // If 400 is due to unsupported audio modality on a model, allow fallback to next candidate
+        if (response.status === 400 && /modality|audio|support|not found/i.test(msg)) {
+          lastErrorMessage = msg;
+          break;
+        }
+
+        // If key is invalid or quota blocked permanently, fail fast
+        if (response.status === 401 || response.status === 403 || /API_KEY_INVALID|unregistered|permission/i.test(msg)) {
+          const keyErr = new Error(msg || 'Invalid or unauthorized Google AI Studio API key.');
+          keyErr.status = response.status;
+          throw keyErr;
+        }
+      }
+
+      // If 503 (high demand spike) on first attempt, back off briefly and retry once before cascading
+      if (response && response.status === 503 && attempt === 1) {
+        await delay(600);
+        continue;
+      }
+
+      // Extract error message for reporting if all candidates fail
+      try {
+        const errorJson = await response.json();
+        if (errorJson?.error?.message) {
+          lastErrorMessage = errorJson.error.message;
+        }
+      } catch {
+        lastErrorMessage = `Google AI Studio request failed with status ${response?.status}`;
+      }
+      break;
     }
-    const err = new Error(message);
-    err.status = response.status;
-    throw err;
+
+    if (response && response.ok) {
+      try {
+        const data = await response.json();
+        const candidatePart = data.candidates?.[0]?.content?.parts?.[0];
+        if (candidatePart?.inlineData?.data) {
+          successfulModel = candidate;
+          successfulResponseData = data;
+          break;
+        }
+      } catch (parseErr) {
+        lastErrorMessage = parseErr?.message || 'Failed parsing Google audio response';
+      }
+    }
   }
 
-  const data = await response.json();
-  const candidate = data.candidates?.[0];
+  if (!successfulResponseData) {
+    const finalErr = new Error(
+      lastErrorMessage ||
+      'Gemini TTS models are currently experiencing high demand. Please try again shortly or use device audio fallback.'
+    );
+    finalErr.status = lastStatus || 503;
+    throw finalErr;
+  }
+
+  const candidate = successfulResponseData.candidates?.[0];
   const part = candidate?.content?.parts?.[0];
   const inlineData = part?.inlineData;
-
-  if (!inlineData?.data) {
-    throw new Error('Google AI Studio returned no audio data. Please ensure the model supports audio modality.');
-  }
 
   // Convert base64 to byte array
   const binaryString = atob(inlineData.data);
@@ -211,7 +422,10 @@ export async function synthesizeGoogleSpeech({
 
   const audioUrl = URL.createObjectURL(blob);
 
-  // Maintain cache size
+  // Persist into user-side IndexedDB for instant, cost-free future replays
+  storeAudioBlob(cacheKey, blob).catch(() => {});
+
+  // Maintain in-memory cache size
   if (audioCache.size >= 40) {
     const oldestKey = audioCache.keys().next().value;
     const oldUrl = audioCache.get(oldestKey);
@@ -220,10 +434,10 @@ export async function synthesizeGoogleSpeech({
   }
   audioCache.set(cacheKey, audioUrl);
 
-  return { audioUrl, cached: false };
+  return { audioUrl, cached: false, model: successfulModel };
 }
 
-export async function testGoogleTtsKey(apiKey, lang = 'en', voiceName = 'Kore') {
+export async function testGoogleTtsKey(apiKey, lang = 'en', voiceName = 'Kore', model = 'gemini-3.8-flash-tts') {
   const testText = lang === 'hi' 
     ? 'इंटरप्रेप जेमिनी ऑडियो तैयार है।' 
     : 'InterPrep Google AI Studio audio is ready.';
@@ -232,6 +446,7 @@ export async function testGoogleTtsKey(apiKey, lang = 'en', voiceName = 'Kore') 
     lang,
     apiKey,
     voiceName,
+    model,
     rate: 1.0
   });
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Volume2, Pause, Play, Square, Loader2, Sparkles, KeyRound } from 'lucide-react';
-import { synthesizeGoogleSpeech } from '../tts.js';
+import { Volume2, Pause, Play, Square, Loader2, Sparkles, KeyRound, RotateCcw } from 'lucide-react';
+import { synthesizeGoogleSpeech, clearAudioCache } from '../tts.js';
 import { Button } from './ui/button';
 import { PulseBadge } from './lightwind/pulse-badge';
 
@@ -95,7 +95,7 @@ export default function AudioPlayer({ text, lang, data, onOpenSettings }) {
           lang,
           apiKey,
           voiceName: data.ttsVoiceName || 'Kore',
-          model: data.ttsModel || 'gemini-3.8-flash',
+          model: data.ttsModel || 'gemini-3.8-flash-tts',
           rate,
         });
         const audio = new Audio(audioUrl);
@@ -115,9 +115,12 @@ export default function AudioPlayer({ text, lang, data, onOpenSettings }) {
         await audio.play();
         setState('speaking');
       } catch (err) {
-        const reason = err.status === 400 || err.status === 403
-          ? t('Google AI Studio key error: please check your Gemini API key.', 'Google AI Studio key error: kripya Gemini API key check karein.')
-          : (err.message || t('Google AI Studio unreachable.', 'Google AI Studio unreachable.'));
+        let reason = err.message || t('Google AI Studio unreachable.', 'Google AI Studio unreachable.');
+        if (err.status === 400 || err.status === 403) {
+          reason = t('Google AI Studio key error: please check your Gemini API key.', 'Google AI Studio key error: kripya Gemini API key check karein.');
+        } else if (err.status === 503 || /high demand|unavailable/i.test(err.message)) {
+          reason = t('Gemini TTS is experiencing high demand.', 'Gemini TTS par abhi high demand hai.');
+        }
         setMessage(`${reason} ${t('Falling back to device voice.', 'Device voice use ho rahi hai.')}`);
         speakBrowser();
       }
@@ -139,6 +142,15 @@ export default function AudioPlayer({ text, lang, data, onOpenSettings }) {
       window.speechSynthesis?.cancel();
       setState('idle');
     }
+  }
+
+  async function handleClearCache() {
+    stopAllAudio();
+    await clearAudioCache();
+    setMessage(t('✓ Audio cache cleared.', '✓ Audio cache saaf ho gaya.'));
+    setTimeout(() => {
+      setMessage('');
+    }, 2000);
   }
 
   const isGoogleActive = Boolean(data?.googleTtsApiKey?.trim());
@@ -198,6 +210,17 @@ export default function AudioPlayer({ text, lang, data, onOpenSettings }) {
             ))}
           </select>
         </div>
+
+        <button
+          type="button"
+          onClick={handleClearCache}
+          className="inline-flex items-center gap-1 rounded border border-border/70 bg-card/60 px-2 py-1 text-[11px] text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+          title={t('Clear stored audio cache (re-fetch fresh audio next time)', 'Cached audio clear karein')}
+          aria-label="Clear audio cache"
+        >
+          <RotateCcw className="h-2.5 w-2.5" />
+          <span className="hidden sm:inline">{t('Clear Cache', 'Clear Cache')}</span>
+        </button>
 
         <button
           type="button"
