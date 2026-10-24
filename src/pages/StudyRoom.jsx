@@ -14,6 +14,10 @@ import {
   RotateCcw,
   Sparkles,
   HelpCircle,
+  Flame,
+  Zap,
+  Layers,
+  GraduationCap
 } from 'lucide-react';
 import questions from '../questions.json';
 import { selectQuestions } from '../model.js';
@@ -24,6 +28,9 @@ import CodeBlock from '../components/CodeBlock';
 import { TipCallout, MistakeCallout, RememberThisCard } from '../components/Callout';
 import { Button } from '../components/ui/button';
 import { cn } from '../lib/utils';
+import { getAnswerForMode } from '../lib/answerModes';
+import { INTERVIEW_TRACKS, getQuestionsForTrack } from '../lib/tracks';
+import { getStreakData, recordQuestionReviewed, getDailyDeck } from '../lib/spacedRepetition';
 
 const topics = [
   { id: 'php', name: 'PHP fundamentals', short: 'PHP', description: 'Types, variables & essentials' },
@@ -40,6 +47,10 @@ export default function StudyRoom() {
   const navigate = useNavigate();
   const { data, lang, markProgress, toggleSaved, openVoiceSettings, learnedCount, totalQuestions } = useApp();
 
+  const [activeTrack, setActiveTrack] = useState('all');
+  const [dailyDeckMode, setDailyDeckMode] = useState(false);
+  const [streakInfo, setStreakInfo] = useState(() => getStreakData());
+  const [answerDepth, setAnswerDepth] = useState('standard'); // 'standard' | 'pitch' | 'deep'
   const [category, setCategory] = useState('all');
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState('all');
@@ -58,9 +69,13 @@ export default function StudyRoom() {
     }
   }, [paramId]);
 
-  const filtered = selectQuestions(questions, {
+  const basePool = activeTrack !== 'all' ? getQuestionsForTrack(questions, activeTrack) : questions;
+  const dailyDeck = getDailyDeck(questions, data.progress, data.saved, 10);
+  const effectiveQuestions = dailyDeckMode ? dailyDeck.map(d => d.question) : basePool;
+
+  const filtered = selectQuestions(effectiveQuestions, {
     query,
-    category,
+    category: dailyDeckMode ? 'all' : category,
     savedOnly: false,
     saved: data.saved,
     progress: data.progress,
@@ -77,19 +92,30 @@ export default function StudyRoom() {
     navigate(`/learn/${newId}`, { replace: true });
   }
 
+  const handleMarkProgress = (id, val) => {
+    markProgress(id, val);
+    const updated = recordQuestionReviewed(id);
+    if (updated) setStreakInfo(updated);
+  };
+
   const questionIndex = filtered.findIndex(item => item.id === q?.id);
   const isSaved = q ? data.saved.includes(q.id) : false;
   const currentStatus = q ? data.progress[q.id] : null;
 
   return (
     <div className="space-y-6">
-      {/* Header Banner matching CodeWithAnimation */}
+      {/* Header Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
         <div>
           <div className="flex items-center gap-2 font-sans text-xs font-semibold text-pink uppercase tracking-widest mb-1.5">
             <span>Interview Curriculum</span>
             <span className="text-hairline-2">•</span>
             <span>137 Concepts</span>
+            <span className="text-hairline-2">•</span>
+            <span className="inline-flex items-center gap-1 text-amber-500 font-bold">
+              <Flame className="h-3.5 w-3.5 fill-current" />
+              {streakInfo.currentStreak} Day Streak
+            </span>
           </div>
           <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-ink leading-tight">
             The Complete PHP & Laravel Practice
@@ -99,41 +125,99 @@ export default function StudyRoom() {
           </p>
         </div>
 
-        {/* Progress Card */}
-        <div className="flex items-center gap-3 rounded-2xl border border-hairline bg-surface p-3.5 shadow-2xs shrink-0 self-start sm:self-auto">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-pink/10 text-pink">
-            <Check className="h-5 w-5" />
+        {/* Daily 10 Streak & Mastery Cards */}
+        <div className="flex items-center gap-3 flex-wrap sm:flex-nowrap">
+          <button
+            onClick={() => setDailyDeckMode(!dailyDeckMode)}
+            className={cn(
+              "flex items-center gap-2.5 rounded-2xl border p-3 shadow-2xs transition-all cursor-pointer text-left",
+              dailyDeckMode
+                ? "border-amber-500/50 bg-amber-500/10 text-foreground ring-1 ring-amber-500/40"
+                : "border-hairline bg-surface hover:bg-surface-2 text-ink-soft"
+            )}
+          >
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/10 text-amber-500">
+              <Zap className="h-4 w-4 fill-current" />
+            </div>
+            <div className="text-xs">
+              <div className="font-bold text-ink flex items-center gap-1">
+                <span>Today's Daily 10</span>
+                <span className="text-[10px] bg-amber-500/20 text-amber-600 dark:text-amber-400 px-1.5 py-0.2 rounded font-mono">
+                  {streakInfo.reviewedToday?.length || 0}/10
+                </span>
+              </div>
+              <span className="text-[11px] text-ink-mute">
+                {dailyDeckMode ? 'Showing Daily Deck' : 'Click to drill today'}
+              </span>
+            </div>
+          </button>
+
+          <div className="flex items-center gap-3 rounded-2xl border border-hairline bg-surface p-3 shadow-2xs shrink-0">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-pink/10 text-pink">
+              <Check className="h-4 w-4" />
+            </div>
+            <div className="text-xs">
+              <strong className="text-sm font-bold text-ink">
+                {learnedCount} <span className="text-xs font-normal text-ink-mute">/ {totalQuestions}</span>
+              </strong>
+              <span className="block text-[11px] text-ink-mute font-sans">Mastered</span>
+            </div>
           </div>
-          <div className="text-xs">
-            <strong className="text-base font-bold text-ink">
-              {learnedCount} <span className="text-xs font-normal text-ink-mute">/ {totalQuestions}</span>
-            </strong>
-            <span className="block text-[11px] text-ink-mute font-sans">Concepts mastered</span>
-          </div>
+        </div>
+      </div>
+
+      {/* Curated Career Track Selector */}
+      <div className="p-2.5 rounded-2xl border border-hairline bg-surface-2/60 flex items-center gap-2 overflow-x-auto scrollbar-none">
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-ink-mute px-2 whitespace-nowrap">
+          <GraduationCap className="h-4 w-4 text-pink" />
+          <span>Curated Track:</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          {INTERVIEW_TRACKS.map(track => {
+            const isActive = activeTrack === track.id && !dailyDeckMode;
+            return (
+              <button
+                key={track.id}
+                onClick={() => {
+                  setDailyDeckMode(false);
+                  setActiveTrack(track.id);
+                  setCategory('all');
+                }}
+                className={cn(
+                  "rounded-full px-3.5 py-1 text-xs font-semibold whitespace-nowrap transition-all border cursor-pointer select-none",
+                  isActive
+                    ? "bg-ink text-surface border-ink shadow-xs"
+                    : "border-hairline bg-surface text-ink-soft hover:bg-surface-2 hover:text-ink"
+                )}
+              >
+                {track.short}
+              </button>
+            );
+          })}
         </div>
       </div>
 
       {/* Topic Horizontal Filter Strip with codewithanimation pills */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0" aria-label="Topics">
         <button
-          onClick={() => { setCategory('all'); setStatus('all'); }}
+          onClick={() => { setCategory('all'); setStatus('all'); setDailyDeckMode(false); }}
           className={cn(
             "rounded-full px-4 py-1.5 text-xs font-semibold whitespace-nowrap transition-all border cursor-pointer select-none min-h-[36px]",
-            category === 'all'
+            category === 'all' && !dailyDeckMode
               ? "bg-pink text-white border-pink shadow-xs"
               : "border-hairline bg-surface text-ink-soft hover:bg-surface-2 hover:text-ink"
           )}
         >
-          All Topics ({questions.length})
+          All Topics ({basePool.length})
         </button>
 
         {topics.map(topic => {
-          const count = questions.filter(item => item.category === topic.id).length;
-          const isSelected = category === topic.id;
+          const count = basePool.filter(item => item.category === topic.id).length;
+          const isSelected = category === topic.id && !dailyDeckMode;
           return (
             <button
               key={topic.id}
-              onClick={() => { setCategory(topic.id); setStatus('all'); }}
+              onClick={() => { setCategory(topic.id); setStatus('all'); setDailyDeckMode(false); }}
               className={cn(
                 "rounded-full px-4 py-1.5 text-xs font-semibold whitespace-nowrap transition-all border cursor-pointer select-none min-h-[36px]",
                 isSelected
@@ -361,13 +445,57 @@ export default function StudyRoom() {
                   </button>
                 </div>
 
-                <button
-                  onClick={() => setShowAnswer(!showAnswer)}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-hairline bg-surface px-3 py-1.5 text-xs font-semibold text-ink-soft hover:bg-surface-2 hover:text-ink cursor-pointer transition-all shadow-2xs"
-                >
-                  <HelpCircle className="h-3.5 w-3.5 text-pink" />
-                  <span>{showAnswer ? 'Active Recall Mode' : 'Show Answer'}</span>
-                </button>
+                <div className="flex items-center gap-2">
+                  {/* Answer Depth Switcher (when on explain tab) */}
+                  {tab === 'explain' && showAnswer && (
+                    <div className="flex items-center bg-surface-2 p-0.5 rounded-lg border border-hairline text-[11px]">
+                      <button
+                        onClick={() => setAnswerDepth('pitch')}
+                        title="30-Second Elevator Pitch"
+                        className={cn(
+                          "px-2.5 py-1 rounded-md font-medium transition-all cursor-pointer",
+                          answerDepth === 'pitch'
+                            ? "bg-pink text-white font-semibold shadow-2xs"
+                            : "text-ink-mute hover:text-ink"
+                        )}
+                      >
+                        ⚡ 30s Pitch
+                      </button>
+                      <button
+                        onClick={() => setAnswerDepth('standard')}
+                        title="Standard Comprehensive Explanation"
+                        className={cn(
+                          "px-2.5 py-1 rounded-md font-medium transition-all cursor-pointer",
+                          answerDepth === 'standard'
+                            ? "bg-pink text-white font-semibold shadow-2xs"
+                            : "text-ink-mute hover:text-ink"
+                        )}
+                      >
+                        📖 Full Guide
+                      </button>
+                      <button
+                        onClick={() => setAnswerDepth('deep')}
+                        title="Low-level Architecture & Memory Mechanics"
+                        className={cn(
+                          "px-2.5 py-1 rounded-md font-medium transition-all cursor-pointer",
+                          answerDepth === 'deep'
+                            ? "bg-pink text-white font-semibold shadow-2xs"
+                            : "text-ink-mute hover:text-ink"
+                        )}
+                      >
+                        🔬 Deep Dive
+                      </button>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => setShowAnswer(!showAnswer)}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-hairline bg-surface px-3 py-1.5 text-xs font-semibold text-ink-soft hover:bg-surface-2 hover:text-ink cursor-pointer transition-all shadow-2xs"
+                  >
+                    <HelpCircle className="h-3.5 w-3.5 text-pink" />
+                    <span>{showAnswer ? 'Active Recall Mode' : 'Show Answer'}</span>
+                  </button>
+                </div>
               </div>
 
               {/* Answer Content */}
@@ -393,17 +521,17 @@ export default function StudyRoom() {
               ) : tab === 'explain' ? (
                 /* Explanation Tab */
                 <div className="space-y-6">
-                  {/* Audio Player with Gemini TTS */}
+                  {/* Audio Player with Gemini TTS - reads currently selected depth */}
                   <AudioPlayer
-                    key={q.id}
-                    text={`${q.title[lang]}. ${q.answer[lang]}`}
+                    key={`${q.id}-${answerDepth}`}
+                    text={`${q.title[lang]}. ${getAnswerForMode(q, answerDepth, lang)}`}
                     lang={lang}
                     data={data}
                     onOpenSettings={openVoiceSettings}
                   />
 
                   {/* Formatted Markdown */}
-                  <Markdown text={q.answer[lang]} />
+                  <Markdown text={getAnswerForMode(q, answerDepth, lang)} />
 
                   {/* Tip Callout matching CodeWithAnimation */}
                   <TipCallout title="Interview Delivery Tip">
@@ -438,12 +566,12 @@ export default function StudyRoom() {
                   {q.code && q.code.length > 0 ? (
                     q.code.map((c, i) => (
                       <CodeBlock
-                        key={i}
+                        key={`${q.id}-${i}`}
                         code={c.text}
                         language={c.language}
                         filename={c.language === 'php' ? `example_${i + 1}.php` : `${c.language}_snippet`}
                         questionId={q.id}
-                        showRunButton={c.language === 'php' && !['laravel', 'scenarios', 'sql'].includes(q.category)}
+                        category={q.category}
                       />
                     ))
                   ) : (
@@ -453,10 +581,11 @@ export default function StudyRoom() {
                     </div>
                   )}
 
-                  {['laravel', 'scenarios', 'sql'].includes(q.category) && q.code?.length > 0 && (
-                    <p className="text-[12px] text-ink-mute font-sans leading-relaxed">
-                      * Reference code: requires a configured database/Laravel environment; does not run inside the isolated PHP client sandbox.
-                    </p>
+                  {q.code?.length > 0 && (
+                    <div className="flex items-center gap-2 text-[12px] text-ink-mute font-sans pt-1">
+                      <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                      <span>Live Interactive Sandbox: Edit code examples in-place and click <strong>Run Code</strong> (or press Ctrl+Enter) to execute immediately.</span>
+                    </div>
                   )}
                 </div>
               )}
@@ -467,7 +596,7 @@ export default function StudyRoom() {
               <div className="flex items-center gap-2">
                 <span className="text-xs text-ink-mute">Rate mastery:</span>
                 <button
-                  onClick={() => markProgress(q.id, 'review')}
+                  onClick={() => handleMarkProgress(q.id, 'review')}
                   className={cn(
                     "inline-flex items-center gap-1.5 rounded-lg border px-3 sm:px-3.5 py-2 sm:py-1.5 text-xs font-semibold transition-all cursor-pointer shadow-2xs min-h-[44px] sm:min-h-0",
                     currentStatus === 'review'
@@ -479,7 +608,7 @@ export default function StudyRoom() {
                   <span>Review Later</span>
                 </button>
                 <button
-                  onClick={() => markProgress(q.id, 'learned')}
+                  onClick={() => handleMarkProgress(q.id, 'learned')}
                   className={cn(
                     "inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 sm:py-1.5 text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-95 min-h-[44px] sm:min-h-0",
                     currentStatus === 'learned'

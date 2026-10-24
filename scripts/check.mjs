@@ -23,15 +23,23 @@ assert.equal(cleanTextForSpeech('Hello `PHP` **world**!'), 'Hello PHP world!');
 assert.equal(getVoiceConfig({lang:'hi'}).languageCode, 'hi-IN');
 assert.equal(getVoiceConfig({lang:'hi',gender:'FEMALE'}).voiceName, 'Kore');
 assert.equal(getVoiceConfig({lang:'en',gender:'MALE'}).voiceName, 'Puck');
-assert.equal(normalizeTtsModel('gemini-3.8-flash'), 'gemini-3.8-flash-tts');
-assert.equal(normalizeTtsModel(''), 'gemini-3.8-flash-tts');
-assert.equal(normalizeTtsModel('gemini-2.0-flash'), 'gemini-2.0-flash');
-assert.ok(GEMINI_TTS_MODELS.some(m => m.id === 'gemini-3.8-flash-tts'));
-assert.ok(GEMINI_TTS_MODELS.some(m => m.id === 'gemini-3.8-flash-lite-tts'));
+assert.equal(normalizeTtsModel('gemini-3.8-flash'), 'gemini-3.8-flash');
+assert.equal(normalizeTtsModel(''), 'gemini-3.8-flash');
+assert.equal(normalizeTtsModel('gemini-2.0-flash'), 'gemini-3.8-flash');
+assert.ok(GEMINI_TTS_MODELS.length >= 1);
 assert.equal(readStore({getItem:(k)=>k==='google_tts_api_key'?'my-test-key':null}).googleTtsApiKey, 'my-test-key');
-assert.equal(readStore({getItem:()=>null}).ttsModel, 'gemini-3.8-flash-tts');
-assert.equal(readStore({getItem:()=>JSON.stringify({ttsModel:'gemini-3.8-flash'})}).ttsModel, 'gemini-3.8-flash-tts');
+assert.equal(readStore({getItem:()=>null}).ttsModel, 'gemini-3.8-flash');
+assert.equal(readStore({getItem:()=>JSON.stringify({ttsModel:'gemini-3.8-flash'})}).ttsModel, 'gemini-3.8-flash');
 const stats = await getAudioCacheStats();
 assert.equal(typeof stats.count, 'number');
 await clearAudioCache();
+
+import { executeSql } from '../src/lib/sqlEngine.js';
+const sqlTest = executeSql('SELECT email, COUNT(*) AS occurrences FROM users WHERE email IS NOT NULL GROUP BY email HAVING COUNT(*) > 1;');
+assert.ok(sqlTest.rows.length >= 2, 'Duplicate emails query should return at least 2 rows');
+assert.equal(sqlTest.columns.join(','), 'email,occurrences');
+
+const sqlNoOrders = executeSql('SELECT c.id, c.name FROM customers c WHERE NOT EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = c.id);');
+assert.ok(sqlNoOrders.rows.length >= 2, 'Customers with no orders should return at least 2 rows');
+
 console.log('CONTENT_AND_LOGIC_OK');

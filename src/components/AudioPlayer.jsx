@@ -95,7 +95,7 @@ export default function AudioPlayer({ text, lang, data, onOpenSettings }) {
           lang,
           apiKey,
           voiceName: data.ttsVoiceName || 'Kore',
-          model: data.ttsModel || 'gemini-3.8-flash-tts',
+          model: data.ttsModel || 'gemini-3.8-flash',
           rate,
         });
         const audio = new Audio(audioUrl);

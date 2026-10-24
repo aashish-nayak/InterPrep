@@ -242,15 +242,15 @@ export default function HomePage() {
                 className="inline-flex items-center gap-2 rounded-xl border border-hairline bg-surface hover:bg-surface-2 text-ink font-semibold text-sm px-5 py-3 shadow-2xs transition-all active:scale-95"
               >
                 <Code2 className="h-4 w-4 text-pink" />
-                <span>Run PHP in Browser (WASM)</span>
+                <span>Code Lab & SQL Sandbox</span>
               </Link>
 
               <Link
                 to="/mock"
                 className="inline-flex items-center gap-2 rounded-xl border border-hairline bg-surface hover:bg-surface-2 text-ink font-semibold text-sm px-5 py-3 shadow-2xs transition-all active:scale-95"
               >
-                <Mic className="h-4 w-4 text-teal" />
-                <span>Mock Interview Mode</span>
+                <Zap className="h-4 w-4 text-amber-500 fill-current" />
+                <span>Mock & 60s Blitz</span>
               </Link>
             </div>
 

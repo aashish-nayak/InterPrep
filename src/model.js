@@ -14,8 +14,7 @@ export function readStore(storage){
  const googleTtsApiKey=(typeof data.googleTtsApiKey==='string'&&data.googleTtsApiKey.trim())||(typeof dedicatedKey==='string'&&dedicatedKey.trim())||'';
  const ttsVoiceName=['Kore','Aoede','Puck','Charon','Fenrir'].includes(data.ttsVoiceName)?data.ttsVoiceName:'Kore';
  const ttsGender=['FEMALE','MALE'].includes(data.ttsGender)?data.ttsGender:'FEMALE';
- const rawModel=typeof data.ttsModel==='string'&&data.ttsModel?data.ttsModel:'gemini-3.8-flash-tts';
- const ttsModel=rawModel==='gemini-3.8-flash'?'gemini-3.8-flash-tts':rawModel;
+ const ttsModel='gemini-3.8-flash';
  return {
   lang:data.lang==='en'?'en':'hi',
   saved:Array.isArray(data.saved)?data.saved.filter(Number.isInteger):[],
@@ -27,5 +26,5 @@ export function readStore(storage){
   ttsGender,
   ttsModel
  };
- }catch{return {lang:'hi',saved:[],progress:{},history:[],theme:null,googleTtsApiKey:'',ttsVoiceName:'Kore',ttsGender:'FEMALE',ttsModel:'gemini-3.8-flash-tts'};}
+ }catch{return {lang:'hi',saved:[],progress:{},history:[],theme:null,googleTtsApiKey:'',ttsVoiceName:'Kore',ttsGender:'FEMALE',ttsModel:'gemini-3.8-flash'};}
 }

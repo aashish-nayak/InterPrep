@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Play, Pause, RotateCcw, ArrowRight, ArrowLeft, Code2, Terminal, Square, Pencil, Check, Braces, Sparkles, Cpu, Volume2, VolumeX } from 'lucide-react';
+import { Play, Pause, RotateCcw, ArrowRight, ArrowLeft, Code2, Terminal, Square, Pencil, Check, Braces, Sparkles, Cpu, Volume2, VolumeX, Bug, CheckCircle2, HelpCircle } from 'lucide-react';
 import { traceIds, explainStep } from './trace.js';
 import { Button } from './components/ui/button';
 import { Badge } from './components/ui/badge';
@@ -7,6 +7,7 @@ import { PulseBadge } from './components/lightwind/pulse-badge';
 import { cn } from './lib/utils';
 import { formatPhpCode } from './lib/formatter';
 import { playExecutionSound, classifyFrameEvent } from './lib/soundFx';
+import { BUG_CHALLENGES } from './lib/bugChallenges';
 
 function Syntax({ line }) {
   if (!line) return <span>&nbsp;</span>;
@@ -19,6 +20,11 @@ function Syntax({ line }) {
 const showValue = value => typeof value === 'string' ? JSON.stringify(value) : JSON.stringify(value);
 
 export default function CodeLab({ questions, initialId = 112, lang = 'en', compact = false, onSelectQuestion }) {
+  const [labMode, setLabMode] = useState('trace'); // 'trace' | 'bug'
+  const [selectedBugId, setSelectedBugId] = useState(BUG_CHALLENGES[0].id);
+  const activeBug = BUG_CHALLENGES.find(b => b.id === selectedBugId) || BUG_CHALLENGES[0];
+  const [showHint, setShowHint] = useState(false);
+
   const available = questions.filter(q => q.code.some(c => c.language === 'php') && !['laravel', 'scenarios', 'sql'].includes(q.category));
   const [id, setId] = useState(available.some(q => q.id === initialId) ? initialId : 112);
   const question = available.find(q => q.id === id) || available[0];
@@ -75,15 +81,40 @@ export default function CodeLab({ questions, initialId = 112, lang = 'en', compa
   }, [initialId]);
 
   useEffect(() => {
-    cleanup();
-    setCode(original);
-    setOutput('');
-    setError('');
-    setState('idle');
-    setFrames([]);
-    setStep(-1);
-    setPlaying(false);
-    setEditing(false);
+    if (labMode === 'bug') {
+      cleanup();
+      setCode(activeBug.buggyCode);
+      setOutput('');
+      setError('');
+      setState('idle');
+      setFrames([]);
+      setStep(-1);
+      setEditing(true);
+      setShowHint(false);
+    } else {
+      cleanup();
+      setCode(original);
+      setOutput('');
+      setError('');
+      setState('idle');
+      setFrames([]);
+      setStep(-1);
+      setEditing(false);
+    }
+  }, [labMode, selectedBugId, original]);
+
+  useEffect(() => {
+    if (labMode === 'trace') {
+      cleanup();
+      setCode(original);
+      setOutput('');
+      setError('');
+      setState('idle');
+      setFrames([]);
+      setStep(-1);
+      setPlaying(false);
+      setEditing(false);
+    }
   }, [id]);
 
   useEffect(() => {
@@ -191,10 +222,12 @@ export default function CodeLab({ questions, initialId = 112, lang = 'en', compa
 
   const explanation = explainStep(frame, code, lang);
 
+  const isBugFixed = labMode === 'bug' && state === 'done' && activeBug.validator(output);
+
   return (
     <section className="space-y-6">
       {!compact && (
-        <div className="space-y-3">
+        <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground mb-1">
@@ -215,32 +248,130 @@ export default function CodeLab({ questions, initialId = 112, lang = 'en', compa
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
-              <label className="text-xs font-semibold text-muted-foreground whitespace-nowrap">
-                Choose challenge:
-              </label>
-              <select
-                value={id}
-                onChange={e => handleSelectExample(Number(e.target.value))}
-                className="w-full sm:w-auto min-h-[44px] sm:min-h-0 rounded-lg border border-hairline bg-card px-3 py-2 sm:py-1.5 text-xs text-foreground shadow-2xs focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer"
+            {/* Mode Switcher Tabs */}
+            <div className="flex items-center bg-muted/60 p-1 rounded-xl border border-hairline">
+              <button
+                onClick={() => setLabMode('trace')}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer",
+                  labMode === 'trace'
+                    ? "bg-bg text-foreground shadow-xs"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
               >
-                {available.map(item => (
-                  <option key={item.id} value={item.id}>
-                    {item.id}. {item.title[lang]}
-                  </option>
-                ))}
-              </select>
+                <Code2 className="h-3.5 w-3.5 text-primary" />
+                <span>Step Trace</span>
+              </button>
+              <button
+                onClick={() => setLabMode('bug')}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer",
+                  labMode === 'bug'
+                    ? "bg-bg text-foreground shadow-xs"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                <Bug className="h-3.5 w-3.5 text-amber-500" />
+                <span>Spot the Bug 🐛</span>
+              </button>
             </div>
           </div>
 
-          <div className="rounded-xl border border-border/80 bg-card p-4 shadow-xs">
-            <h2 className="text-base font-semibold text-foreground">
-              {question.title[lang]}
-            </h2>
-            <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-              {question.answer[lang].replace(/\*\*|`/g, '')}
-            </p>
-          </div>
+          {labMode === 'trace' ? (
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl border border-border/80 bg-card shadow-xs">
+              <div>
+                <h2 className="text-sm font-semibold text-foreground">
+                  {question.id}. {question.title[lang]}
+                </h2>
+                <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+                  {question.answer[lang].replace(/\*\*|`/g, '').slice(0, 140)}...
+                </p>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <label className="text-xs font-medium text-muted-foreground whitespace-nowrap">
+                  Snippet:
+                </label>
+                <select
+                  value={id}
+                  onChange={e => handleSelectExample(Number(e.target.value))}
+                  className="rounded-lg border border-hairline bg-bg px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer max-w-[200px] truncate"
+                >
+                  {available.map(item => (
+                    <option key={item.id} value={item.id}>
+                      {item.id}. {item.title[lang]}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          ) : (
+            /* Spot the Bug Challenge Panel */
+            <div className="space-y-3">
+              <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-500/5 space-y-3 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className="border-amber-500/40 text-amber-600 dark:text-amber-400 font-semibold text-[10px]">
+                      {activeBug.difficulty} • {activeBug.category}
+                    </Badge>
+                    <h3 className="text-sm font-bold text-foreground">
+                      {activeBug.title}
+                    </h3>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <label className="text-xs font-medium text-muted-foreground">
+                      Select Challenge:
+                    </label>
+                    <select
+                      value={selectedBugId}
+                      onChange={e => setSelectedBugId(e.target.value)}
+                      className="rounded-lg border border-hairline bg-bg px-2.5 py-1 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer"
+                    >
+                      {BUG_CHALLENGES.map(b => (
+                        <option key={b.id} value={b.id}>
+                          {b.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  <strong className="text-foreground">Scenario: </strong>
+                  {activeBug.scenario}
+                </p>
+
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-hairline text-xs font-mono">
+                  <span className="text-muted-foreground">
+                    Target Expected Output: <span className="text-primary font-bold">{activeBug.expectedOutput}</span>
+                  </span>
+                  <button
+                    onClick={() => setShowHint(!showHint)}
+                    className="text-amber-500 hover:text-amber-600 font-sans text-xs font-semibold flex items-center gap-1 cursor-pointer"
+                  >
+                    <HelpCircle className="h-3.5 w-3.5" />
+                    <span>{showHint ? 'Hide Hint' : 'Show Hint'}</span>
+                  </button>
+                </div>
+
+                {showHint && (
+                  <div className="p-2.5 rounded-lg bg-bg border border-hairline text-xs text-muted-foreground italic">
+                    💡 Hint: {activeBug.hint}
+                  </div>
+                )}
+              </div>
+
+              {isBugFixed && (
+                <div className="p-4 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 flex items-start gap-3 shadow-xs">
+                  <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
+                  <div className="text-xs space-y-1">
+                    <div className="font-bold text-sm">🎉 Bug Resolved Successfully!</div>
+                    <p className="leading-relaxed">{activeBug.fixExplanation}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
 

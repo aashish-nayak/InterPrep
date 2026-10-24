@@ -19,19 +19,21 @@ import {
   Square,
   Eye,
   EyeOff,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Zap
 } from 'lucide-react';
 import { Button } from './components/ui/button';
 import { Badge } from './components/ui/badge';
 import { Textarea } from './components/ui/input';
 import { usePhpRunner } from './lib/usePhpRunner';
 import { prepareSessionQuestions } from './mockQuestions';
+import BlitzMode from './components/BlitzMode';
 
 export default function MockInterview({ questions, topics, lang = 'en', onComplete }) {
   // Rehearsal Setup state
   const [category, setCategory] = useState('all');
   const [count, setCount] = useState(5);
-  const [mode, setMode] = useState('adaptive'); // 'adaptive' | 'mcq' | 'code' | 'open'
+  const [mode, setMode] = useState('adaptive'); // 'adaptive' | 'mcq' | 'code' | 'open' | 'blitz'
 
   // Session state
   const [session, setSession] = useState(null);
@@ -148,6 +150,14 @@ export default function MockInterview({ questions, topics, lang = 'en', onComple
     open: { label: 'Scenario Discussion', icon: Layers, variant: 'secondary' },
   };
 
+  if (mode === 'blitz') {
+    return (
+      <section className="space-y-6 max-w-4xl mx-auto">
+        <BlitzMode onExit={() => setMode('adaptive')} />
+      </section>
+    );
+  }
+
   return (
     <section className="space-y-6 max-w-4xl mx-auto">
       {/* Page Title & Breadcrumb */}
@@ -234,6 +244,7 @@ export default function MockInterview({ questions, topics, lang = 'en', onComple
                     { id: 'mcq', name: 'MCQs Only', desc: 'Multiple choice tests' },
                     { id: 'code', name: 'Code Challenges', desc: 'Write & execute code' },
                     { id: 'open', name: 'Scenarios Only', desc: 'Architecture review' },
+                    { id: 'blitz', name: '⚡ 60s Blitz', desc: 'Rapid output prediction' },
                   ].map(m => (
                     <button
                       key={m.id}

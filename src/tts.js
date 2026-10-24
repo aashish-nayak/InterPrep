@@ -208,16 +208,11 @@ export async function clearAudioCache() {
 }
 
 export const GEMINI_TTS_MODELS = [
-  { id: 'gemini-3.8-flash-tts', name: 'Gemini 3.8 Flash TTS (High Fidelity · Recommended)', tier: 'flagship' },
-  { id: 'gemini-3.8-flash-lite-tts', name: 'Gemini 3.8 Flash-Lite TTS (Fast & High Availability)', tier: 'lite' },
-  { id: 'gemini-2.0-flash', name: 'Gemini 2.0 Flash (Stable Fallback)', tier: 'legacy' }
+  { id: 'gemini-3.8-flash', name: 'Gemini 3.8 Flash (High Fidelity · Fast)', tier: 'flagship' }
 ];
 
 export function normalizeTtsModel(rawModel) {
-  if (!rawModel || rawModel === 'gemini-3.8-flash') {
-    return 'gemini-3.8-flash-tts';
-  }
-  return rawModel;
+  return 'gemini-3.8-flash';
 }
 
 function delay(ms) {
@@ -230,7 +225,7 @@ export async function synthesizeGoogleSpeech({
   apiKey,
   voiceName,
   gender = 'FEMALE',
-  model = 'gemini-3.8-flash-tts',
+  model = 'gemini-3.8-flash',
   rate = 1.0
 }) {
   const key = (apiKey || '').trim();
@@ -282,26 +277,35 @@ export async function synthesizeGoogleSpeech({
             voiceName: voice.voiceName
           }
         }
+      },
+      thinkingConfig: {
+        thinkingBudget: 0
       }
     }
   };
 
-  async function requestModel(targetModel) {
+  async function requestModel(targetModel, withThinkingBudget = true) {
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(targetModel)}:generateContent?key=${encodeURIComponent(key)}`;
-    return fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    const currentPayload = JSON.parse(JSON.stringify(payload));
+    if (!withThinkingBudget && currentPayload.generationConfig?.thinkingConfig) {
+      delete currentPayload.generationConfig.thinkingConfig;
+    }
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    try {
+      return await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(currentPayload),
+        signal: controller.signal
+      });
+    } finally {
+      clearTimeout(timeoutId);
+    }
   }
 
-  // Build prioritized candidate models list with high-availability fallbacks
-  const candidateModels = Array.from(new Set([
-    normalizedRequestedModel,
-    'gemini-3.8-flash-lite-tts',
-    'gemini-3.8-flash-tts',
-    'gemini-2.0-flash'
-  ]));
+  // Gemini 3.8 Flash is the designated high-fidelity audio model
+  const candidateModels = ['gemini-3.8-flash'];
 
   let lastStatus = null;
   let lastErrorMessage = '';
@@ -312,12 +316,14 @@ export async function synthesizeGoogleSpeech({
     const candidate = candidateModels[i];
     let response = null;
 
-    // Up to 2 attempts per candidate if encountering 503 high demand spike
+    // Up to 2 attempts per candidate if encountering 503 high demand spike or thinkingConfig retry
     for (let attempt = 1; attempt <= 2; attempt++) {
       try {
-        response = await requestModel(candidate);
+        response = await requestModel(candidate, attempt === 1);
       } catch (networkErr) {
-        lastErrorMessage = networkErr?.message || 'Network error reaching Google AI Studio';
+        lastErrorMessage = networkErr?.name === 'AbortError'
+          ? 'Google AI Studio request timed out after 15s'
+          : (networkErr?.message || 'Network error reaching Google AI Studio');
         break;
       }
 
@@ -328,7 +334,7 @@ export async function synthesizeGoogleSpeech({
       lastStatus = response?.status;
 
       // Handle auth / permission issues early
-      if (response && (response.status === 400 || response.status === 401 || response.status === 403)) {
+      if (response && (response.status === 400 || response.status === 401 || response.status === 403 || response.status === 404)) {
         let errBody = null;
         try {
           errBody = await response.json();
@@ -337,8 +343,13 @@ export async function synthesizeGoogleSpeech({
         }
         const msg = errBody?.error?.message || '';
 
-        // If 400 is due to unsupported audio modality on a model, allow fallback to next candidate
-        if (response.status === 400 && /modality|audio|support|not found/i.test(msg)) {
+        // If 400 is caused by thinkingConfig parameter on some endpoints, retry once without it
+        if (response.status === 400 && /thinking|thinkingBudget/i.test(msg) && attempt === 1) {
+          continue;
+        }
+
+        // If 400/404 is due to unsupported audio modality or deprecated model
+        if ((response.status === 400 || response.status === 404) && /modality|audio|support|not found|no longer available|update your code/i.test(msg)) {
           lastErrorMessage = msg;
           break;
         }
@@ -351,7 +362,7 @@ export async function synthesizeGoogleSpeech({
         }
       }
 
-      // If 503 (high demand spike) on first attempt, back off briefly and retry once before cascading
+      // If 503 (high demand spike) on first attempt, back off briefly and retry once
       if (response && response.status === 503 && attempt === 1) {
         await delay(600);
         continue;
@@ -372,11 +383,14 @@ export async function synthesizeGoogleSpeech({
     if (response && response.ok) {
       try {
         const data = await response.json();
-        const candidatePart = data.candidates?.[0]?.content?.parts?.[0];
-        if (candidatePart?.inlineData?.data) {
+        const parts = data.candidates?.[0]?.content?.parts || [];
+        const audioPart = parts.find(p => p?.inlineData?.data);
+        if (audioPart) {
           successfulModel = candidate;
           successfulResponseData = data;
           break;
+        } else {
+          lastErrorMessage = 'No audio part returned in Gemini response';
         }
       } catch (parseErr) {
         lastErrorMessage = parseErr?.message || 'Failed parsing Google audio response';
@@ -394,8 +408,13 @@ export async function synthesizeGoogleSpeech({
   }
 
   const candidate = successfulResponseData.candidates?.[0];
-  const part = candidate?.content?.parts?.[0];
-  const inlineData = part?.inlineData;
+  const parts = candidate?.content?.parts || [];
+  const audioPart = parts.find(p => p?.inlineData?.data);
+  const inlineData = audioPart?.inlineData;
+
+  if (!inlineData?.data) {
+    throw new Error('Audio payload missing in Gemini response.');
+  }
 
   // Convert base64 to byte array
   const binaryString = atob(inlineData.data);
@@ -437,7 +456,7 @@ export async function synthesizeGoogleSpeech({
   return { audioUrl, cached: false, model: successfulModel };
 }
 
-export async function testGoogleTtsKey(apiKey, lang = 'en', voiceName = 'Kore', model = 'gemini-3.8-flash-tts') {
+export async function testGoogleTtsKey(apiKey, lang = 'en', voiceName = 'Kore', model = 'gemini-3.8-flash') {
   const testText = lang === 'hi' 
     ? 'इंटरप्रेप जेमिनी ऑडियो तैयार है।' 
     : 'InterPrep Google AI Studio audio is ready.';
